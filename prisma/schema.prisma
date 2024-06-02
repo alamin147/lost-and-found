@@ -45,12 +45,13 @@ model FoundItem {
   foundItemName String
   description   String
   location      String
+  date          DateTime           @default(now())
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
   claim         Claim[]
   claimProcess  String             @default("")
+  isClaimed     Boolean            @default(false)
 
-  // foundItemCategoryId String?
   @@map("foundItems")
 }
 

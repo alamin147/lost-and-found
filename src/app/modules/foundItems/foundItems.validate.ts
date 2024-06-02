@@ -10,6 +10,15 @@ const createFoundItem = z.object({
     description: z.string({
       required_error: "Description of item field is required",
     }),
+    img: z.string({
+      required_error: "Image of item field is required",
+    }),
+    claimProcess: z.string({
+      required_error: "Claim Process of item field is required",
+    }),
+    date: z.string({
+      required_error: "Date of item field is required",
+    }),
   }),
 });
 

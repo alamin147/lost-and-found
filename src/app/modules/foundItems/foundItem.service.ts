@@ -8,6 +8,9 @@ const createFoundItem = async (data: FoundItem, userId: string) => {
     data: {
       categoryId: data.categoryId,
       description: data.description,
+      date: data.date,
+      claimProcess: data.claimProcess,
+      img: data.img,
       foundItemName: data.foundItemName,
       location: data.location,
       userId,
@@ -61,13 +64,42 @@ const getFoundItem = async (data: TFilter) => {
     skip: (Number(page) - 1) * Number(limit),
     take: Number(limit),
 
-    select: selects.foundItemSelect,
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          email: true,
+        },
+      },
+      category: true,
+    },
   });
 
+  return result;
+};
+const getSingleFoundItem = async (id: string) => {
+  const result = await prisma.foundItem.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          role: true,
+        },
+      },
+      category: true,
+    },
+  });
   return result;
 };
 
 export const foundItemService = {
   createFoundItem,
   getFoundItem,
+  getSingleFoundItem,
 };

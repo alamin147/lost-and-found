@@ -50,10 +50,29 @@ const getFoundItem = async (req: Request, res: Response) => {
   }
 };
 
+const getSingleFoundItem = async (req: Request, res: Response) => {
+  try {
+    const id: any = req?.params.id;
 
+    const result = await foundItemService.getSingleFoundItem(id);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Found item retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
 
 export const foundItemController = {
   createFoundItem,
   getFoundItem,
-  
+  getSingleFoundItem,
 };

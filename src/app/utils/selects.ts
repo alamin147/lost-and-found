@@ -1,5 +1,6 @@
 const foundItemSelect = {
   id: true,
+  img:true,
   foundItemName: true,
   description: true,
   location: true,

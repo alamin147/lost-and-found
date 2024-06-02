@@ -24,7 +24,8 @@ const createLostItem = async (userId: string, item: LostItem) => {
       location: item.location,
       date: item.date,
       userId,
-    }, include: {
+    },
+    include: {
       user: {
         select: {
           id: true,
@@ -40,7 +41,26 @@ const createLostItem = async (userId: string, item: LostItem) => {
 };
 
 const getLostItem = async () => {
-  const result = await prisma.lostItem.findMany();
+  const result = await prisma.lostItem.findMany({
+    include: {
+      user: true,
+      category: true,
+    },
+  });
+  return result;
+};
+
+// get single lost item
+const getSingleLostItem = async (singleId: string) => {
+  const result = await prisma.lostItem.findFirst({
+    where: {
+      id: singleId,
+    },
+    include: {
+      user: true,
+      category: true,
+    },
+  });
   return result;
 };
 
@@ -48,4 +68,5 @@ export const lostTItemServices = {
   markAsFound,
   createLostItem,
   getLostItem,
+  getSingleLostItem
 };

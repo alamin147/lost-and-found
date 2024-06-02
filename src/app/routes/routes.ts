@@ -57,7 +57,7 @@ router.post(
   authController.changeUsername
 );
 ///////////////////////////////////////////////////found item//////////////////////////////////////////////
-// found item category create
+// category create
 router.post(
   "/found-item-categories",
   validateRequest(FoundItemCategorySchema.createFoundItemCategory),
@@ -65,15 +65,14 @@ router.post(
   foundItemcategoryController.createItemCategory
 );
 
-// found item category get: optional for testing purpose
+// found item category get
 router.get(
   "/found-item-categories",
   foundItemcategoryController.getItemCategory
 );
 
 // found item create
-router.post(
-  "/found-items",
+router.post("/found-items",
   validateRequest(FoundItemSchema.createFoundItem),
   auth(),
   foundItemController.createFoundItem
@@ -81,6 +80,8 @@ router.post(
 
 // found item get
 router.get("/found-items", foundItemController.getFoundItem);
+// single found item get
+router.get("/found-item/:id", foundItemController.getSingleFoundItem);
 ///////////////////////////////////////////////////claim//////////////////////////////////////////////
 // claim create
 router.post(
@@ -107,7 +108,9 @@ router.put("/found-lost", auth(), lostItemController.markAsFound);
 // create lost item
 router.post("/lostItem", auth(), lostItemController.createLostItem);
 // get lost item
-router.get("/lostItem", auth(), lostItemController.getLostItem);
+router.get("/lostItem", lostItemController.getLostItem);
+// get single lost item
+router.get("/lostItem/:id", lostItemController.getSingleLostItem);
 
 export default router;
 
