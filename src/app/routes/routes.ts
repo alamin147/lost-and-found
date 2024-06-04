@@ -17,7 +17,6 @@ const router = express.Router();
 // user registraion
 router.post(
   "/register",
-  validateRequest(UserSchema.userRegisterSchema),
   userController.registerUser
 );
 
@@ -46,14 +45,14 @@ router.post(
 router.post(
   "/change-email",
   auth(),
-  validateRequest(UserSchema.changeEmailUsernameSchema),
+  validateRequest(UserSchema.changeEmailSchema),
   authController.changeEmail
 );
 // change username
 router.post(
   "/change-username",
   auth(),
-  validateRequest(UserSchema.changeEmailUsernameSchema),
+  validateRequest(UserSchema.changeUsernameSchema),
   authController.changeUsername
 );
 ///////////////////////////////////////////////////found item//////////////////////////////////////////////

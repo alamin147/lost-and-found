@@ -18,6 +18,7 @@ model User {
   updatedAt DateTime    @updatedAt
   foundItem FoundItem[]
   claim     Claim[]
+  userImg   String      @default("")
   // profile   UserProfile?
   LostItem  LostItem[]
 

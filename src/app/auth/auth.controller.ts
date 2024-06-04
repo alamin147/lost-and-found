@@ -25,7 +25,7 @@ const login = async (req: Request, res: Response) => {
 };
 const newPasswords = async (req: Request, res: Response) => {
   try {
-    const passwordData: newPassword = req.body;
+    const passwordData = req.body;
     const result = await authServices.newPasswords(passwordData, req.user);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -46,6 +46,7 @@ const newPasswords = async (req: Request, res: Response) => {
 const changeEmail = async (req: Request, res: Response) => {
   try {
     const email:string = req.body;
+    // console.log(email)
     const result = await authServices.changeEmail(email, req.user);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -65,7 +66,7 @@ const changeEmail = async (req: Request, res: Response) => {
 
 const changeUsername = async (req: Request, res: Response) => {
   try {
-    const username:string = req.body;
+    const username = req.body;
     const result = await authServices.changeUsername(username, req.user);
     sendResponse(res, {
         statusCode: StatusCodes.OK,

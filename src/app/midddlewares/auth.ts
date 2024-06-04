@@ -3,7 +3,7 @@ import { utils } from "../utils/utils";
 import AppError from "../global/error";
 import { StatusCodes } from "http-status-codes";
 
-const auth = (...requiredRoles: string[]) => {
+const auth = () => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
@@ -17,9 +17,9 @@ const auth = (...requiredRoles: string[]) => {
         throw new AppError(StatusCodes.UNAUTHORIZED, "You are not authorized!");
       }
 
-      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new AppError(StatusCodes.FORBIDDEN, "Forbidden");
-      }
+      // if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
+      //   throw new AppError(StatusCodes.FORBIDDEN, "Forbidden");
+      // }
 
       next();
     } catch (err) {

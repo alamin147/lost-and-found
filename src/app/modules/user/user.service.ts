@@ -23,11 +23,13 @@ const registerUser = async (user: User) => {
         username: user.username,
         email: user.email,
         password: hashedPassword,
+        userImg: user.userImg,
       },
     });
 
     const returnData = {
       id: createdUser.id,
+      userImg: createdUser.userImg,
       username: createdUser.username,
       email: createdUser.email,
       createdAt: createdUser.createdAt,

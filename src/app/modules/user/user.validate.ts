@@ -24,21 +24,28 @@ const userLoginSchema = z.object({
 });
 const changePasswordSchema = z.object({
   body: z.object({
-    currentPassword: z.string({required_error:"Current password is required"}),
+    currentPassword: z.string({
+      required_error: "Current password is required",
+    }),
     newPassword: z.string({
       required_error: "New password field is required",
     }),
   }),
 });
-const changeEmailUsernameSchema = z.object({
+const changeEmailSchema = z.object({
   body: z.object({
-    email: z.string().optional(),
-    username: z.string().optional(),
+    email: z.string({ required_error: "Email is required" }),
+  }),
+});
+const changeUsernameSchema = z.object({
+  body: z.object({
+    username: z.string({ required_error: "Username is required" }),
   }),
 });
 export const UserSchema = {
   userRegisterSchema,
   userLoginSchema,
   changePasswordSchema,
-  changeEmailUsernameSchema
+  changeEmailSchema,
+  changeUsernameSchema,
 };

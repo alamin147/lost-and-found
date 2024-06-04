@@ -6,16 +6,16 @@ import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 const prisma = new PrismaClient();
 const loginUser = async (data: TLogin) => {
-  const { password, username } = data;
+  const { password, username: userName } = data;
 
   const user = await prisma.user.findFirst({
     where: {
       OR: [
         {
-          username,
+          username: userName,
         },
         {
-          email: username,
+          email: userName,
         },
       ],
     },
@@ -29,8 +29,8 @@ const loginUser = async (data: TLogin) => {
     throw new AppError(StatusCodes.FORBIDDEN, "Password is incorrect");
   }
 
-  const { id, email,role } = user;
-  const accessToken = utils.createToken({ id, email,role });
+  const { id, email, role, userImg, username } = user;
+  const accessToken = utils.createToken({ id, email, username, role, userImg });
   return {
     id: user.id,
     username: user.username,
@@ -40,22 +40,23 @@ const loginUser = async (data: TLogin) => {
   };
 };
 
-const newPasswords = async (data: newPassword, user: JwtPayload) => {
+const newPasswords = async (data: any, user: JwtPayload) => {
+  console.log(data.newPassword);
+  if (data.currentPassword === data.newPassword) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Password is same");
+  }
   const existedUser = await prisma.user.findFirst({
     where: {
       username: user.username,
     },
   });
-
+  // console.log(user)
   if (
     data.currentPassword &&
     existedUser &&
     !(await utils.comparePasswords(data.currentPassword, existedUser.password))
   ) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Password is incorrect");
-  }
-  if (data.currentPassword === data.newPassword) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Password is same");
   }
 
   const newHashPassword = await utils.passwordHash(data.newPassword);
@@ -69,49 +70,45 @@ const newPasswords = async (data: newPassword, user: JwtPayload) => {
   });
 };
 
-const changeEmail = async (email: string, user: JwtPayload) => {
-  const existedUser = await prisma.user.findFirst({
-    where: {
-      email,
-    },
+const changeEmail = async (email: any, user: JwtPayload) => {
+  // console.log(email);
+  const existedUser: any = await prisma.user.findFirst({
+    where: email,
   });
+  // console.log(user);
+
+  // console.log(existedUser);
   if (existedUser) {
     throw new AppError(
       StatusCodes.CONFLICT,
-      "Email already exists. Try new one"
+      "Email already exists. Try new one!"
     );
   }
-
   await prisma.user.update({
     where: {
-      username: user.username,
+      username: user?.username,
     },
-    data: {
-      email,
-    },
+    data: email,
   });
 };
 
-const changeUsername = async (username: string, user: JwtPayload) => {
+const changeUsername = async (username: object, user: JwtPayload) => {
   const existedUser = await prisma.user.findFirst({
-    where: {
-      username,
-    },
+    where: username,
   });
   if (existedUser) {
     throw new AppError(
       StatusCodes.CONFLICT,
-      "Username already exists. Try new one"
+      "Username already exists. Try new one!"
     );
   }
 
+  // console.log(user);
   await prisma.user.update({
     where: {
       email: user.email,
     },
-    data: {
-      username,
-    },
+    data: username,
   });
 };
 
