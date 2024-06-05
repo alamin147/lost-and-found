@@ -69,14 +69,12 @@ router.get(
   "/found-item-categories",
   foundItemcategoryController.getItemCategory
 );
-
 // found item create
 router.post("/found-items",
   validateRequest(FoundItemSchema.createFoundItem),
   auth(),
   foundItemController.createFoundItem
 );
-
 // found item get
 router.get("/found-items", foundItemController.getFoundItem);
 // single found item get
@@ -90,8 +88,11 @@ router.post(
   claimsController.createClaim
 );
 
-// claims get
+// claims get all
 router.get("/claims", auth(), claimsController.getClaim);
+
+// my claims get 
+router.get("/my/claims", auth(), claimsController.getMyClaim);
 
 // claims update
 router.put(
@@ -110,6 +111,20 @@ router.post("/lostItem", auth(), lostItemController.createLostItem);
 router.get("/lostItem", lostItemController.getLostItem);
 // get single lost item
 router.get("/lostItem/:id", lostItemController.getSingleLostItem);
+// get my lost item
+router.get("/my/lostItem",auth(), lostItemController.getMyLostItem);
+// get my found item
+router.get("/my/foundItem",auth(), foundItemController.getMyFoundItem);
+
+// my lost item edit
+router.put("/my/lostItem",auth(), lostItemController.editMyLostItem);
+// my found item edit
+router.put("/my/foundItem",auth(), foundItemController.editMyFoundItem);
+
+// delete my lost item
+router.delete("/my/lostItem/:id",auth(), lostItemController.deleteMyLostItem);
+// delete my found item
+router.delete("/my/foundItem/:id",auth(), foundItemController.deleteMyFoundItem);
 
 export default router;
 

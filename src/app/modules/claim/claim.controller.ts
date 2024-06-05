@@ -45,6 +45,27 @@ const getClaim = async (req: Request, res: Response) => {
   }
 };
 
+const getMyClaim = async (req: Request, res: Response) => {
+  try {
+    const user = req.user
+    const result = await claimsService.getMyClaim(user);
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Claims retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
+
 const updateClaimStatus = async (req: Request, res: Response,next:NextFunction) => {
   try {
     const result = await claimsService.updateClaimStatus(req.params.claimId,req.body);
@@ -63,4 +84,5 @@ export const claimsController = {
   createClaim,
   getClaim,
   updateClaimStatus,
+  getMyClaim
 };

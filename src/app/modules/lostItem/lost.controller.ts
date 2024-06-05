@@ -60,6 +60,7 @@ const getLostItem = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getSingleLostItem = async (req: Request, res: Response) => {
   const id: any = req?.params.id;
   // console.log(id)
@@ -81,9 +82,72 @@ const getSingleLostItem = async (req: Request, res: Response) => {
   }
 };
 
+const getMyLostItem = async (req: Request, res: Response) => {
+ 
+  const result = await lostTItemServices.getMyLostItem(req.user);
+  try {
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Lost item retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
+
+const editMyLostItem = async (req: Request, res: Response) => {
+  const data = req.body;
+  const user = req.user
+  await lostTItemServices.editMyLostItem(data);
+  try {
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Lost item edited successfully",
+      data: null,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
+
+const deleteMyLostItem = async (req: Request, res: Response) => {
+  const id=req.params.id
+  await lostTItemServices.deleteMyLostItem(id);
+  try {
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Lost item deleted successfully",
+      data: null,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
 export const lostItemController = {
   markAsFound,
   createLostItem,
   getLostItem,
   getSingleLostItem,
+  getMyLostItem,
+  editMyLostItem,
+  deleteMyLostItem
 };

@@ -1,4 +1,5 @@
 import { LostItem, PrismaClient } from "@prisma/client";
+import { JwtPayload } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -63,10 +64,54 @@ const getSingleLostItem = async (singleId: string) => {
   });
   return result;
 };
+// get my lost item
+const getMyLostItem = async (user: JwtPayload) => {
+  const result = await prisma.lostItem.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      user: true,
+      category: true,
+    },
+  });
+  return result;
+};
 
+const editMyLostItem = async (data: any) => {
+  const updateData: any = {};
+
+  if (data?.location) {
+    updateData.location = data?.location;
+  }
+  if (data?.date) {
+    updateData.date = data?.date;
+  }
+  if (data?.description) {
+    updateData.description = data?.description;
+  }
+  const result = await prisma.lostItem.update({
+    where: {
+      id: data.id,
+    },
+    data: updateData,
+  });
+  return result;
+};
+const deleteMyLostItem = async (id: string) => {
+  await prisma.lostItem.delete({
+    where: {
+      id,
+    },
+  });
+  return null;
+};
 export const lostTItemServices = {
   markAsFound,
   createLostItem,
   getLostItem,
-  getSingleLostItem
+  getSingleLostItem,
+  getMyLostItem,
+  editMyLostItem,
+  deleteMyLostItem,
 };

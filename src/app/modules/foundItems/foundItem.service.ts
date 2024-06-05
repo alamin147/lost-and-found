@@ -1,6 +1,7 @@
 import { FoundItem, Prisma, PrismaClient } from "@prisma/client";
 import { TFilter } from "../../global/interface";
 import { selects } from "../../utils/selects";
+import { JwtPayload } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 const createFoundItem = async (data: FoundItem, userId: string) => {
@@ -98,8 +99,54 @@ const getSingleFoundItem = async (id: string) => {
   return result;
 };
 
+// get my lost item
+const getMyFoundItem = async (user: JwtPayload) => {
+  const result = await prisma.foundItem.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      user: true,
+      category: true,
+    },
+  });
+  return result;
+};
+
+const editMyFoundItem = async (data: any) => {
+  const updateData: any = {};
+
+  if (data?.location) {
+    updateData.location = data?.location;
+  }
+  if (data?.date) {
+    updateData.date = data?.date;
+  }
+  if (data?.description) {
+    updateData.description = data?.description;
+  }
+  const result = await prisma.foundItem.update({
+    where: {
+      id: data.id,
+    },
+    data: updateData,
+  });
+  return result;
+};
+const deleteMyFoundItem = async (id: string) => {
+  await prisma.foundItem.delete({
+    where: {
+      id,
+    },
+  });
+  return null;
+};
+
 export const foundItemService = {
   createFoundItem,
   getFoundItem,
   getSingleFoundItem,
+  getMyFoundItem,
+  editMyFoundItem,
+  deleteMyFoundItem,
 };
