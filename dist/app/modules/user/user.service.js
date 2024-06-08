@@ -33,10 +33,12 @@ const registerUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
                 username: user.username,
                 email: user.email,
                 password: hashedPassword,
+                userImg: user.userImg,
             },
         });
         const returnData = {
             id: createdUser.id,
+            userImg: createdUser.userImg,
             username: createdUser.username,
             email: createdUser.email,
             createdAt: createdUser.createdAt,
@@ -46,6 +48,47 @@ const registerUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     }));
     return result;
 });
+const allUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.user.findMany({
+        orderBy: {
+            activated: "desc",
+        },
+    });
+    return result;
+});
+const blockUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield prisma.user.findFirst({
+        where: {
+            AND: [{ id }, { activated: true }],
+        },
+    });
+    // if true user found, then user is active. need to block
+    if (users) {
+        yield prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                activated: false,
+            },
+        });
+        return "block";
+    }
+    // user not found then user is blocked, need to active
+    else {
+        yield prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                activated: true,
+            },
+        });
+        return "active";
+    }
+});
 exports.userService = {
     registerUser,
+    allUsers,
+    blockUser,
 };

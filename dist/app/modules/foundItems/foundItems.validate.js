@@ -13,6 +13,15 @@ const createFoundItem = zod_1.z.object({
         description: zod_1.z.string({
             required_error: "Description of item field is required",
         }),
+        img: zod_1.z.string({
+            required_error: "Image of item field is required",
+        }),
+        claimProcess: zod_1.z.string({
+            required_error: "Claim Process of item field is required",
+        }),
+        date: zod_1.z.string({
+            required_error: "Date of item field is required",
+        }),
     }),
 });
 exports.FoundItemSchema = {

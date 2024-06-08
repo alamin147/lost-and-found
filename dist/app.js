@@ -8,7 +8,10 @@ const cors_1 = __importDefault(require("cors"));
 const routes_1 = __importDefault(require("./app/routes/routes"));
 const errorHandler_1 = __importDefault(require("./app/midddlewares/errorHandler"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+}));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.get("/", (req, res) => {

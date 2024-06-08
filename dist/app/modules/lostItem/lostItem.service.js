@@ -23,6 +23,99 @@ const markAsFound = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const createLostItem = (userId, item) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.lostItem.create({
+        data: {
+            lostItemName: item.lostItemName,
+            description: item.description,
+            categoryId: item.categoryId,
+            img: item.img,
+            location: item.location,
+            date: item.date,
+            userId,
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    createdAt: true,
+                    updatedAt: true,
+                },
+            },
+            category: true,
+        },
+    });
+    return result;
+});
+const getLostItem = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.lostItem.findMany({
+        include: {
+            user: true,
+            category: true,
+        },
+    });
+    return result;
+});
+// get single lost item
+const getSingleLostItem = (singleId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.lostItem.findFirst({
+        where: {
+            id: singleId,
+        },
+        include: {
+            user: true,
+            category: true,
+        },
+    });
+    return result;
+});
+// get my lost item
+const getMyLostItem = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.lostItem.findMany({
+        where: {
+            userId: user.id,
+        },
+        include: {
+            user: true,
+            category: true,
+        },
+    });
+    return result;
+});
+const editMyLostItem = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const updateData = {};
+    if (data === null || data === void 0 ? void 0 : data.location) {
+        updateData.location = data === null || data === void 0 ? void 0 : data.location;
+    }
+    if (data === null || data === void 0 ? void 0 : data.date) {
+        updateData.date = data === null || data === void 0 ? void 0 : data.date;
+    }
+    if (data === null || data === void 0 ? void 0 : data.description) {
+        updateData.description = data === null || data === void 0 ? void 0 : data.description;
+    }
+    const result = yield prisma.lostItem.update({
+        where: {
+            id: data.id,
+        },
+        data: updateData,
+    });
+    return result;
+});
+const deleteMyLostItem = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    yield prisma.lostItem.delete({
+        where: {
+            id,
+        },
+    });
+    return null;
+});
 exports.lostTItemServices = {
     markAsFound,
+    createLostItem,
+    getLostItem,
+    getSingleLostItem,
+    getMyLostItem,
+    editMyLostItem,
+    deleteMyLostItem,
 };

@@ -44,6 +44,37 @@ const getClaim = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const getMyClaim = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.claim.findMany({
+        where: {
+            userId: user.id,
+        },
+        include: {
+            foundItem: {
+                include: {
+                    category: true,
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            email: true,
+                            createdAt: true,
+                            updatedAt: true,
+                        },
+                    },
+                },
+            },
+            user: {
+                select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                },
+            },
+        },
+    });
+    return result;
+});
 const updateClaimStatus = (claimId, data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma.claim.update({
         where: {
@@ -57,4 +88,5 @@ exports.claimsService = {
     createClaim,
     getClaim,
     updateClaimStatus,
+    getMyClaim,
 };

@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 const loginUser = async (data: TLogin) => {
   const { password, username: userName } = data;
 
+  console.log(data);
   const user = await prisma.user.findFirst({
     where: {
       OR: [
@@ -31,6 +32,7 @@ const loginUser = async (data: TLogin) => {
 
   const { id, email, role, userImg, username } = user;
   const accessToken = utils.createToken({ id, email, username, role, userImg });
+
   return {
     id: user.id,
     username: user.username,

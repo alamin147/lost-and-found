@@ -31,6 +31,52 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(error);
     }
 });
+const blockUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const result = yield user_service_1.userService.blockUser(id);
+        if (result == "active") {
+            (0, response_1.default)(res, {
+                statusCode: http_status_codes_1.StatusCodes.OK,
+                success: true,
+                message: "User Activated successfully",
+                data: result,
+            });
+        }
+        else {
+            (0, response_1.default)(res, {
+                statusCode: http_status_codes_1.StatusCodes.OK,
+                success: true,
+                message: "User Blocked successfully",
+                data: result,
+            });
+        }
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: true,
+            message: "User failed to blocked",
+            data: null,
+        });
+    }
+});
+const allUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.userService.allUsers();
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "User retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.userController = {
     registerUser,
+    allUsers,
+    blockUser,
 };

@@ -19,15 +19,16 @@ const error_1 = __importDefault(require("../global/error"));
 const http_status_codes_1 = require("http-status-codes");
 const prisma = new client_1.PrismaClient();
 const loginUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, username } = data;
+    const { password, username: userName } = data;
+    console.log(data);
     const user = yield prisma.user.findFirst({
         where: {
             OR: [
                 {
-                    username,
+                    username: userName,
                 },
                 {
-                    email,
+                    email: userName,
                 },
             ],
         },
@@ -38,28 +39,31 @@ const loginUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     if (password && !(yield utils_1.utils.comparePasswords(password, user.password))) {
         throw new error_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Password is incorrect");
     }
-    const { id } = user;
-    const accessToken = utils_1.utils.createToken({ id, email });
+    const { id, email, role, userImg, username } = user;
+    const accessToken = utils_1.utils.createToken({ id, email, username, role, userImg });
     return {
         id: user.id,
         username: user.username,
         email: user.email,
+        role,
         token: accessToken,
     };
 });
 const newPasswords = (data, user) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(data.newPassword);
+    if (data.currentPassword === data.newPassword) {
+        throw new error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Password is same");
+    }
     const existedUser = yield prisma.user.findFirst({
         where: {
             username: user.username,
         },
     });
+    // console.log(user)
     if (data.currentPassword &&
         existedUser &&
         !(yield utils_1.utils.comparePasswords(data.currentPassword, existedUser.password))) {
         throw new error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Password is incorrect");
-    }
-    if (data.currentPassword === data.newPassword) {
-        throw new error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Password is same");
     }
     const newHashPassword = yield utils_1.utils.passwordHash(data.newPassword);
     yield prisma.user.update({
@@ -72,39 +76,35 @@ const newPasswords = (data, user) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 const changeEmail = (email, user) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(email);
     const existedUser = yield prisma.user.findFirst({
-        where: {
-            email,
-        },
+        where: email,
     });
+    // console.log(user);
+    // console.log(existedUser);
     if (existedUser) {
-        throw new error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Email already exists. Try new one");
+        throw new error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Email already exists. Try new one!");
     }
     yield prisma.user.update({
         where: {
-            username: user.username,
+            username: user === null || user === void 0 ? void 0 : user.username,
         },
-        data: {
-            email,
-        },
+        data: email,
     });
 });
 const changeUsername = (username, user) => __awaiter(void 0, void 0, void 0, function* () {
     const existedUser = yield prisma.user.findFirst({
-        where: {
-            username,
-        },
+        where: username,
     });
     if (existedUser) {
-        throw new error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Username already exists. Try new one");
+        throw new error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Username already exists. Try new one!");
     }
+    // console.log(user);
     yield prisma.user.update({
         where: {
             email: user.email,
         },
-        data: {
-            username,
-        },
+        data: username,
     });
 });
 exports.authServices = {

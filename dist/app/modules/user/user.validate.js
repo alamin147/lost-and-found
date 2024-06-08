@@ -26,21 +26,28 @@ const userLoginSchema = zod_1.z.object({
 });
 const changePasswordSchema = zod_1.z.object({
     body: zod_1.z.object({
-        currentPassword: zod_1.z.string({ required_error: "Current password is required" }),
+        currentPassword: zod_1.z.string({
+            required_error: "Current password is required",
+        }),
         newPassword: zod_1.z.string({
             required_error: "New password field is required",
         }),
     }),
 });
-const changeEmailUsernameSchema = zod_1.z.object({
+const changeEmailSchema = zod_1.z.object({
     body: zod_1.z.object({
-        email: zod_1.z.string().optional(),
-        username: zod_1.z.string().optional(),
+        email: zod_1.z.string({ required_error: "Email is required" }),
+    }),
+});
+const changeUsernameSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        username: zod_1.z.string({ required_error: "Username is required" }),
     }),
 });
 exports.UserSchema = {
     userRegisterSchema,
     userLoginSchema,
     changePasswordSchema,
-    changeEmailUsernameSchema
+    changeEmailSchema,
+    changeUsernameSchema,
 };

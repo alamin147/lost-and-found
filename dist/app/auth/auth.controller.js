@@ -59,6 +59,7 @@ const newPasswords = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 const changeEmail = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = req.body;
+        // console.log(email)
         const result = yield auth_service_1.authServices.changeEmail(email, req.user);
         (0, response_1.default)(res, {
             statusCode: http_status_codes_1.StatusCodes.OK,

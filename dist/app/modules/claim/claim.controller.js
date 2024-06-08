@@ -55,6 +55,26 @@ const getClaim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
+const getMyClaim = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const result = yield claim_service_1.claimsService.getMyClaim(user);
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Claims retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
 const updateClaimStatus = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield claim_service_1.claimsService.updateClaimStatus(req.params.claimId, req.body);
@@ -74,4 +94,5 @@ exports.claimsController = {
     createClaim,
     getClaim,
     updateClaimStatus,
+    getMyClaim
 };

@@ -58,7 +58,90 @@ const getFoundItem = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
+const getSingleFoundItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req === null || req === void 0 ? void 0 : req.params.id;
+        const result = yield foundItem_service_1.foundItemService.getSingleFoundItem(id);
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Found item retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const getMyFoundItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield foundItem_service_1.foundItemService.getMyFoundItem(req.user);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Found item retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const editMyFoundItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body;
+    yield foundItem_service_1.foundItemService.editMyFoundItem(data);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Found item edited successfully",
+            data: null,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const deleteMyFoundItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    yield foundItem_service_1.foundItemService.deleteMyFoundItem(id);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Found item deleted successfully",
+            data: null,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
 exports.foundItemController = {
     createFoundItem,
     getFoundItem,
+    getSingleFoundItem,
+    getMyFoundItem,
+    editMyFoundItem,
+    deleteMyFoundItem
 };

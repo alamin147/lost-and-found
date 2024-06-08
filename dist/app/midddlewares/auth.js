@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils/utils");
 const error_1 = __importDefault(require("../global/error"));
 const http_status_codes_1 = require("http-status-codes");
-const auth = (...requiredRoles) => {
+const auth = () => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const token = req.headers.authorization;
@@ -27,9 +27,9 @@ const auth = (...requiredRoles) => {
             if (!verifiedUser) {
                 throw new error_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "You are not authorized!");
             }
-            if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-                throw new error_1.default(http_status_codes_1.StatusCodes.FORBIDDEN, "Forbidden");
-            }
+            // if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
+            //   throw new AppError(StatusCodes.FORBIDDEN, "Forbidden");
+            // }
             next();
         }
         catch (err) {

@@ -41,11 +41,49 @@ const registerUser = async (user: User) => {
 };
 
 const allUsers = async () => {
-  const result = await prisma.user.findMany();
+  const result = await prisma.user.findMany({
+    orderBy: {
+      activated: "desc",
+    },
+  });
   return result;
+};
+
+const blockUser = async (id: string) => {
+  const users = await prisma.user.findFirst({
+    where: {
+      AND: [{ id }, { activated: true }],
+    },
+  });
+
+  // if true user found, then user is active. need to block
+  if (users) {
+     await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        activated: false,
+      },
+    });
+    return "block";
+  }
+  // user not found then user is blocked, need to active
+  else {
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        activated: true,
+      },
+    });
+    return "active";
+  }
 };
 
 export const userService = {
   registerUser,
   allUsers,
+  blockUser,
 };

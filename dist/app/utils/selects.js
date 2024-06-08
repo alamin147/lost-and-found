@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.selects = void 0;
 const foundItemSelect = {
     id: true,
+    img: true,
     foundItemName: true,
     description: true,
     location: true,
@@ -11,7 +12,7 @@ const foundItemSelect = {
     user: {
         select: {
             id: true,
-            name: true,
+            username: true,
             email: true,
             createdAt: true,
             updatedAt: true,

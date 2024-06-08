@@ -11,6 +11,8 @@ import { FoundItemCategorySchema } from "../modules/foundItemCategory/foundItemC
 import { FoundItemSchema } from "../modules/foundItems/foundItems.validate";
 import { ItemClaimSchema } from "../modules/claim/claim.validate";
 import { lostItemController } from "../modules/lostItem/lost.controller";
+import { utils } from "../utils/utils";
+import { adminStats } from "../utils/adminStats";
 
 const router = express.Router();
 ////////////////////////////////////////////////// user //////////////////////////////////////////////
@@ -125,6 +127,13 @@ router.put("/my/foundItem",auth(), foundItemController.editMyFoundItem);
 router.delete("/my/lostItem/:id",auth(), lostItemController.deleteMyLostItem);
 // delete my found item
 router.delete("/my/foundItem/:id",auth(), foundItemController.deleteMyFoundItem);
+
+
+// get stats for admin
+router.get("/admin/stats",auth(), adminStats);
+
+// block a user
+router.put("/block/user/:id",auth(), userController.blockUser);
 
 export default router;
 

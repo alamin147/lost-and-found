@@ -36,6 +36,132 @@ const markAsFound = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
+const createLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const item = req.body;
+        const result = yield lostItem_service_1.lostTItemServices.createLostItem(req.user.id, item);
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.CREATED,
+            success: true,
+            message: "Lost items created successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const getLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lostItem_service_1.lostTItemServices.getLostItem();
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Lost items retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const getSingleLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req === null || req === void 0 ? void 0 : req.params.id;
+    // console.log(id)
+    const result = yield lostItem_service_1.lostTItemServices.getSingleLostItem(id);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Lost item retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const getMyLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield lostItem_service_1.lostTItemServices.getMyLostItem(req.user);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Lost item retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const editMyLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = req.body;
+    const user = req.user;
+    yield lostItem_service_1.lostTItemServices.editMyLostItem(data);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Lost item edited successfully",
+            data: null,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
+const deleteMyLostItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    yield lostItem_service_1.lostTItemServices.deleteMyLostItem(id);
+    try {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
+            success: true,
+            message: "Lost item deleted successfully",
+            data: null,
+        });
+    }
+    catch (error) {
+        (0, response_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.BAD_REQUEST,
+            success: false,
+            message: error === null || error === void 0 ? void 0 : error.message,
+            data: null,
+        });
+    }
+});
 exports.lostItemController = {
-    markAsFound
+    markAsFound,
+    createLostItem,
+    getLostItem,
+    getSingleLostItem,
+    getMyLostItem,
+    editMyLostItem,
+    deleteMyLostItem
 };
