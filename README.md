@@ -1,9 +1,5 @@
 # Lost and found system
 
-# Api documentation
-
-    https://documenter.getpostman.com/view/31281100/2sA3JM8N6k#af59c3b4
-    -3f1e-473a-ac53-19a00f5b9e37
 
 # Features
 
