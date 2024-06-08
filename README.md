@@ -48,6 +48,3 @@ Paginated and Filtered Lists: Users can retrieve paginated and filtered lists of
     Prisma studio `npm run studio`
     Prisma migrate `npm run migrate`
 
-# Live url: https://lost-found-system.vercel.app
-# lost-found-backend
-# lost-found-backend
