@@ -14,6 +14,7 @@ CREATE TABLE "users" (
     "role" "userRole" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userImg" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -32,21 +33,27 @@ CREATE TABLE "foundItemsCategories" (
 CREATE TABLE "foundItems" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "img" TEXT NOT NULL DEFAULT '',
     "categoryId" TEXT NOT NULL,
     "foundItemName" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "location" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "claimProcess" TEXT NOT NULL DEFAULT '',
+    "isClaimed" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "foundItems_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "LostItem" (
+CREATE TABLE "lostItems" (
     "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "lostItemName" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
+    "img" TEXT NOT NULL DEFAULT '',
     "description" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
@@ -54,7 +61,7 @@ CREATE TABLE "LostItem" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "isFound" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "LostItem_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "lostItems_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -84,7 +91,10 @@ ALTER TABLE "foundItems" ADD CONSTRAINT "foundItems_userId_fkey" FOREIGN KEY ("u
 ALTER TABLE "foundItems" ADD CONSTRAINT "foundItems_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "foundItemsCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "LostItem" ADD CONSTRAINT "LostItem_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "foundItemsCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "lostItems" ADD CONSTRAINT "lostItems_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "foundItemsCategories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "lostItems" ADD CONSTRAINT "lostItems_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "claims" ADD CONSTRAINT "claims_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
