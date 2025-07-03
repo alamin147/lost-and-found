@@ -1,14 +1,12 @@
-import { PrismaClient } from "@prisma/client";
 import { TLogin, newPassword } from "../global/interface";
 import { utils } from "../utils/utils";
 import AppError from "../global/error";
 import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
-const prisma = new PrismaClient();
+import prisma from "../config/prisma";
 const loginUser = async (data: TLogin) => {
   const { password, username: userName } = data;
 
-  console.log(data);
   const user = await prisma.user.findFirst({
     where: {
       OR: [
