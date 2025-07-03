@@ -1,7 +1,7 @@
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import config from "../config/config";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../config/prisma";
 
 const passwordHash = async (password: string) => {
   const saltRounds = Number(config.saltrounds);
@@ -33,7 +33,6 @@ const verifyToken = (token: string): JwtPayload => {
 
 const calculateMeta = async (data: any) => {
   const { page = 1, limit = 10 } = data;
-  const prisma = new PrismaClient();
   const res = (await prisma.foundItem.findMany({})).length;
 
   const meta = {

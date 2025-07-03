@@ -8,7 +8,7 @@
     "migrate": "npx prisma migrate dev",
     "studio": "npx prisma studio",
     "postinstall": "prisma generate",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate --no-engine && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,12 +18,13 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.8",
-    "prisma": "^5.13.0",
+    "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "^6.11.1",
+    "@prisma/extension-accelerate": "^2.0.1",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "bcrypt": "^5.1.1",

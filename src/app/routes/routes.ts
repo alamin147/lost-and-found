@@ -1,13 +1,13 @@
 import express from "express";
 import { userController } from "../modules/user/user.controllers";
 import { authController } from "../auth/auth.controller";
-import { foundItemcategoryController } from "../modules/foundItemCategory/foundItemcategory.controller";
+import { itemcategoryController } from "../modules/itemCategory/itemcategory.controller";
 import auth from "../midddlewares/auth";
 import { foundItemController } from "../modules/foundItems/foundItem.controller";
 import { claimsController } from "../modules/claim/claim.controller";
 import validateRequest from "../midddlewares/validate";
 import { UserSchema } from "../modules/user/user.validate";
-import { FoundItemCategorySchema } from "../modules/foundItemCategory/foundItemCategory.validate";
+import { FoundItemCategorySchema } from "../modules/itemCategory/itemCategory.validate";
 import { FoundItemSchema } from "../modules/foundItems/foundItems.validate";
 import { ItemClaimSchema } from "../modules/claim/claim.validate";
 import { lostItemController } from "../modules/lostItem/lost.controller";
@@ -63,13 +63,13 @@ router.post(
   "/found-item-categories",
   validateRequest(FoundItemCategorySchema.createFoundItemCategory),
   auth(),
-  foundItemcategoryController.createItemCategory
+  itemcategoryController.createItemCategory
 );
 
 // found item category get
 router.get(
   "/found-item-categories",
-  foundItemcategoryController.getItemCategory
+  itemcategoryController.getItemCategory
 );
 // found item create
 router.post("/found-items",
@@ -93,7 +93,7 @@ router.post(
 // claims get all
 router.get("/claims", auth(), claimsController.getClaim);
 
-// my claims get 
+// my claims get
 router.get("/my/claims", auth(), claimsController.getMyClaim);
 
 // claims update
@@ -136,4 +136,3 @@ router.get("/admin/stats",auth(), adminStats);
 router.put("/block/user/:id",auth(), userController.blockUser);
 
 export default router;
-
