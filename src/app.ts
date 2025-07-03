@@ -7,7 +7,7 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000","https://lost-found-last.vercel.app"],
+    origin: ["http://localhost:3000", "https://lost-found-last.vercel.app"],
     credentials: true,
   })
 );
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
-  res.send({ message: "Welcome to Lost and found services" });
+  res.send({ message: "Welcome to Lost and found services!" });
 });
 
 app.use("/api", router);
