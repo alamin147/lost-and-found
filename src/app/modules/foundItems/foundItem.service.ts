@@ -1,9 +1,7 @@
-import { FoundItem, Prisma, PrismaClient } from "@prisma/client";
+import { FoundItem, Prisma } from "@prisma/client";
 import { TFilter } from "../../global/interface";
-import { selects } from "../../utils/selects";
 import { JwtPayload } from "jsonwebtoken";
-
-const prisma = new PrismaClient();
+import prisma from "../../config/prisma";
 const createFoundItem = async (data: FoundItem, userId: string) => {
   const result = await prisma.foundItem.create({
     data: {

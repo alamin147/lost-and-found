@@ -1,7 +1,6 @@
-import { LostItem, PrismaClient } from "@prisma/client";
+import { LostItem } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
-
-const prisma = new PrismaClient();
+import prisma from "../../config/prisma";
 
 const markAsFound = async (id: string) => {
   const result = await prisma.lostItem.update({
