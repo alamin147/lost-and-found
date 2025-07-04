@@ -4,22 +4,16 @@ import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import prisma from "../config/prisma";
 
-type usernameOrEmail = {
-  usernameOrEmail?: string;
-  password?: string;
-};
-
-const loginUser = async (data: usernameOrEmail) => {
-  const { password, usernameOrEmail } = data;
-
+const loginUser = async (data: any) => {
+  const { password, username: userNameEmail } = data;
   const user = await prisma.user.findFirst({
     where: {
       OR: [
         {
-          username: usernameOrEmail,
+          username: userNameEmail,
         },
         {
-          email: usernameOrEmail,
+          email: userNameEmail,
         },
       ],
     },
