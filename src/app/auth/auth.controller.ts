@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import sendResponse from "../global/response";
 import { StatusCodes } from "http-status-codes";
 import { authServices } from "./auth.service";
-import { TLogin, newPassword } from "../global/interface";
+import { TLogin } from "../global/interface";
 
 const login = async (req: Request, res: Response) => {
   try {
-    
+
     const user: TLogin = req.body;
     const result = await authServices.loginUser(user);
     sendResponse(res, {
