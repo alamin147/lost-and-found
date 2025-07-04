@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import sendResponse from "../../global/response";
 import { StatusCodes } from "http-status-codes";
-import { foundItemcategoryService } from "./foundItemCategory.service";
-import { FoundItemCategory } from "@prisma/client";
+import { itemcategoryService } from "./itemCategory.service";
+import { ItemCategory } from "@prisma/client";
 
 const createItemCategory = async (req: Request, res: Response) => {
   try {
-    const item: FoundItemCategory = req.body;
-    const result = await foundItemcategoryService.createItemCategory(item);
+    const item: ItemCategory = req.body;
+    const result = await itemcategoryService.createItemCategory(item);
 
     sendResponse(res, {
       statusCode: StatusCodes.CREATED,
       success: true,
-      message: "Found item category created successfully",
+      message: "Item category created successfully",
       data: result,
     });
   } catch (error: any) {
@@ -26,12 +26,12 @@ const createItemCategory = async (req: Request, res: Response) => {
 };
 const getItemCategory = async (req: Request, res: Response) => {
   try {
-    const result = await foundItemcategoryService.getItemCategory();
+    const result = await itemcategoryService.getItemCategory();
 
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
-      message: "Found item category retrieved successfully",
+      message: "Item category retrieved successfully",
       data: result,
     });
   } catch (error: any) {
@@ -45,7 +45,7 @@ const getItemCategory = async (req: Request, res: Response) => {
 };
 
 
-export const foundItemcategoryController = {
+export const itemcategoryController = {
   createItemCategory,
   getItemCategory,
 };
