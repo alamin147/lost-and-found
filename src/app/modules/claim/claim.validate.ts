@@ -1,4 +1,4 @@
-import { status } from "@prisma/client";
+import { status } from "../../global/globalValues";
 import { INVALID, z } from "zod";
 const createClaim = z.object({
   body: z.object({
@@ -19,7 +19,7 @@ const updateClaim = z.object({
     distinguishingFeatures: z.string().optional(),
     lostDate: z.string().optional(),
     status: z
-      .enum([status.APPROVED, status.PENDING, status.REJECTED])
+      .enum([status.approved, status.pending, status.rejected])
       .optional(),
   },{message:"Invalid input"}),
 });

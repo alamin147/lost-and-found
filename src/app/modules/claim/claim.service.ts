@@ -1,6 +1,6 @@
-import { Claim, PrismaClient, status } from "@prisma/client";
+import { Claim, status } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
-const prisma = new PrismaClient();
+import prisma from "../../config/prisma";
 
 const createClaim = async (item: Claim, user: JwtPayload) => {
   const result = await prisma.claim.create({
