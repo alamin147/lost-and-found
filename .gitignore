@@ -1,10 +1,35 @@
-node_modules
-# Keep environment variables out of version control
-.env
-*.txt
-.vercel
-prisma/migrations
-dist
-/dist/*
-#ignore dist folder
-/dist/**
+server/node_modules
+server/.env
+server/*.txt
+server/.vercel
+server/prisma/migrations
+server/dist
+server//dist/*
+server/#ignore dist folder
+server//dist/**
+
+
+
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+frontend/node_modules
+frontend/dist
+frontend/dist-ssr
+frontend/*.local
+frontend/.vscode/*
+frontend/!.vscode/extensions.json
+frontend/.idea
+frontend/.DS_Store
+frontend/*.suo
+frontend/*.ntvs*
+frontend/*.njsproj
+frontend/*.sln
+frontend/*.sw?
+frontend/.flowbite-react
+frontend/.vscode
+frontend/dist
