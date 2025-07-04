@@ -1,20 +1,25 @@
-import { TLogin, newPassword } from "../global/interface";
 import { utils } from "../utils/utils";
 import AppError from "../global/error";
 import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import prisma from "../config/prisma";
-const loginUser = async (data: TLogin) => {
-  const { password, username: userName } = data;
+
+type usernameOrEmail = {
+  usernameOrEmail?: string;
+  password?: string;
+};
+
+const loginUser = async (data: usernameOrEmail) => {
+  const { password, usernameOrEmail } = data;
 
   const user = await prisma.user.findFirst({
     where: {
       OR: [
         {
-          username: userName,
+          username: usernameOrEmail,
         },
         {
-          email: userName,
+          email: usernameOrEmail,
         },
       ],
     },
