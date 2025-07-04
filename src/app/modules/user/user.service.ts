@@ -1,8 +1,7 @@
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { utils } from "../../utils/utils";
 import AppError from "../../global/error";
-
-const prisma = new PrismaClient();
+import prisma from "../../config/prisma";
 
 const registerUser = async (user: User) => {
   const existedUser = await prisma.user.findFirst({

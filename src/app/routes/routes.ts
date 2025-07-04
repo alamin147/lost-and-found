@@ -60,15 +60,15 @@ router.post(
 ///////////////////////////////////////////////////found item//////////////////////////////////////////////
 // category create
 router.post(
-  "/found-item-categories",
+  "/item-categories",
   validateRequest(FoundItemCategorySchema.createFoundItemCategory),
   auth(),
   itemcategoryController.createItemCategory
 );
 
-// found item category get
+// category get
 router.get(
-  "/found-item-categories",
+  "/item-categories",
   itemcategoryController.getItemCategory
 );
 // found item create
