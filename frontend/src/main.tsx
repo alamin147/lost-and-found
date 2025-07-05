@@ -8,6 +8,9 @@ import Home from "./pages/home/Home.tsx";
 import Register from "./pages/register/Register.tsx";
 import Login from "./pages/login/Login.tsx";
 import FoundItemsPage from "./pages/foundItems/FoundItems.tsx";
+import SingleFoundItem from "./pages/foundItems/SingleFoundItem.tsx";
+import LostItemsPage from "./pages/lostItems/LostItems.tsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +31,14 @@ const router = createBrowserRouter([
       {
         path: "/foundItems",
         element: <FoundItemsPage />,
+      },
+      {
+        path: "/lostItems",
+        element: <LostItemsPage />,
+      },
+      {
+        path: "/foundItems/:foundItem",
+        element: <SingleFoundItem />,
       },
     ],
   },

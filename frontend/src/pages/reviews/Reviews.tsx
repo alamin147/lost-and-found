@@ -1,5 +1,3 @@
-"use client";
-import "./review.css";
 import { FaUser } from "react-icons/fa";
 import StarRatings from "react-star-ratings";
 const testimonials = [
