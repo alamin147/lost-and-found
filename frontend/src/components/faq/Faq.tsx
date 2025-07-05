@@ -1,70 +1,107 @@
-"use client";
-
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useState } from "react";
+import { useGetFaqsQuery } from "../../redux/api/api";
+import { Spinner } from "flowbite-react";
+
+interface FaqItem {
+  id?: string;
+  question: string;
+  answer: string;
+}
 
 const Faq = () => {
-  // State to keep track of which FAQ item is currently expanded
-  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const { data: faqsData, isLoading } = useGetFaqsQuery({});
 
-  const toggleFaq = (index: any) => {
+  const toggleFaq = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
-  const faqs = [
+  const defaultFaqs: FaqItem[] = [
     {
-      question: "How secure is my insurance information?",
+      question: "How do I report a lost item?",
       answer:
-        "We prioritize the security of your insurance information. We use advanced encryption and strict data protection measures to ensure your data is safe and confidential.",
+        "Simply navigate to the 'Report Lost Item' page, fill out the detailed form with information about your lost item, including description, location, and date. Our system will help track and notify you when a matching item is found.",
     },
     {
-      question: "How can I customize my insurance coverage?",
+      question: "How can I search for my lost item?",
       answer:
-        "Our insurance plans are customizable. You can tailor your coverage to meet your specific needs and budget.",
+        "Use our advanced search feature to look for items by category, location, date, or keywords. You can filter results to find items that match your lost belongings.",
     },
     {
-      question: "Is there a waiting period for insurance claims?",
+      question: "What happens when I find an item that might be mine?",
       answer:
-        "There may be a waiting period for certain insurance claims, depending on the policy terms and conditions. Please refer to your policy documents for details.",
+        "When you spot an item that could be yours, you can submit a claim request with verification details. Our system will help verify ownership before arranging the return.",
+    },
+    {
+      question: "How secure is my personal information?",
+      answer:
+        "We prioritize the security of your personal information. We use advanced encryption and strict data protection measures to ensure your data is safe and confidential.",
     },
   ];
 
+  if (isLoading) {
+    return (
+      <div className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <div className="flex items-center justify-center">
+          <Spinner size="xl" />
+        </div>
+      </div>
+    );
+  }
+
+  // Use server data if available, otherwise fallback to static data
+  const faqs: FaqItem[] = faqsData?.data || defaultFaqs;
+
   return (
-    <div className="bg-gray-900 text-white">
-      <div className=" container mx-auto">
-        <div className="pt-16 px-8 max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
-          <div className="flex flex-col text-left basis-1/2">
-            <p className="inline-block font-semibold text-primary mb-4">FAQ</p>
-            <p className="sm:text-4xl text-3xl font-extrabold text-base-content">
-              Frequently Asked Questions
+    <div className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
+          <div className="flex flex-col text-left lg:basis-1/2">
+            <p className="inline-block font-semibold text-blue-400 mb-4">FAQ</p>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+              Frequently Asked{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Questions
+              </span>
+            </h2>
+            <p className="text-gray-300 text-lg">
+              Find answers to common questions about our lost and found
+              management system.
             </p>
           </div>
-          <ul className="basis-1/2">
+
+          <ul className="lg:basis-1/2 space-y-2">
             {faqs.map((faq, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                className="bg-gradient-to-br from-gray-800/50 via-gray-900/50 to-black/50 rounded-lg border border-gray-700 overflow-hidden"
+              >
                 <button
-                  className="relative flex gap-2 items-center w-full py-5 text-base font-semibold text-left border-t md:text-lg border-base-content/10"
+                  className="relative flex gap-4 items-center w-full p-6 text-base font-semibold text-left hover:bg-gray-700/30 transition-all duration-200"
                   onClick={() => toggleFaq(index)}
                   aria-expanded={expandedIndex === index}
                 >
-                  <span className="flex-1 text-base-content">
+                  <span className="flex-1 text-white text-left">
                     {faq.question}
                   </span>
-                  {expandedIndex === index ? <FaMinus /> : <FaPlus />}
+                  <div className="text-blue-400">
+                    {expandedIndex === index ? <FaMinus /> : <FaPlus />}
+                  </div>
                 </button>
                 <div
                   className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${
-                    expandedIndex === index ? "max-h-[200px]" : "max-h-0"
+                    expandedIndex === index ? "max-h-[300px]" : "max-h-0"
                   }`}
                 >
                   <div
-                    className={`pb-5 leading-relaxed transform transition-transform duration-500 ${
+                    className={`px-6 pb-6 leading-relaxed transform transition-transform duration-500 ${
                       expandedIndex === index
                         ? "translate-y-0"
                         : "-translate-y-4"
                     }`}
                   >
-                    <div className="space-y-2 leading-relaxed">
+                    <div className="text-gray-300 leading-relaxed">
                       {faq.answer}
                     </div>
                   </div>
