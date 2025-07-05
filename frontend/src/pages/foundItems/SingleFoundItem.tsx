@@ -3,9 +3,11 @@ import {
   useCreateClaimMutation,
 } from "../../redux/api/api";
 import { Spinner } from "flowbite-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   FaArrowLeft,
   FaCalendarAlt,
@@ -48,11 +50,6 @@ const SingleFoundItem = () => {
 
   const [createClaim, { isLoading: claimLoading }] = useCreateClaimMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [notification, setNotification] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
-
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
 
   if (!foundItemId) {
@@ -89,21 +86,10 @@ const SingleFoundItem = () => {
 
   const handleClaimModal = () => {
     setIsClaimModalOpen(true);
-    setNotification(null);
   };
-
-  useEffect(() => {
-    if (notification?.type === "success") {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
 
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
-    setNotification(null);
 
     try {
       const claimData = {
@@ -113,26 +99,19 @@ const SingleFoundItem = () => {
       };
 
       const res = await createClaim(claimData);
-
+      console.log("first", res);
       if (res.data?.success) {
-        setNotification({
-          type: "success",
-          message: "Claim submitted successfully! We will review your request.",
-        });
+        toast.success(
+          "Claim submitted successfully! We will review your request."
+        );
         setIsClaimModalOpen(false);
         reset();
       } else {
-        setNotification({
-          type: "error",
-          message: "Failed to submit claim. Please try again.",
-        });
+        toast.error("Failed to submit claim. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting claim:", error);
-      setNotification({
-        type: "error",
-        message: "An unexpected error occurred. Please try again.",
-      });
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -181,29 +160,6 @@ const SingleFoundItem = () => {
 
   return (
     <>
-      {/* Notification */}
-      {notification && (
-        <div className="fixed top-4 right-4 z-50 max-w-sm">
-          <div
-            className={`p-4 rounded-lg shadow-lg ${
-              notification.type === "success"
-                ? "bg-green-900 border border-green-500 text-green-100"
-                : "bg-red-900 border border-red-500 text-red-100"
-            }`}
-          > 
-            <div className="flex items-center justify-between">
-              <p className="text-sm">{notification.message}</p>
-              <button
-                onClick={() => setNotification(null)}
-                className="ml-4 text-gray-300 hover:text-white"
-              >
-                <FaTimes className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         {/* Header with Back Button */}
         <div className="bg-gradient-to-r from-gray-800 to-gray-900 shadow-2xl">
@@ -444,6 +400,19 @@ const SingleFoundItem = () => {
           </div>
         </div>
       )}
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 };
