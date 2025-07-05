@@ -5,7 +5,7 @@ import {
 import { Spinner } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   FaArrowLeft,
   FaCalendarAlt,
@@ -15,13 +15,37 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-const SingleFoundItem = ({ params }: { params?: any }) => {
-  // params
-  const foundItemId = params?.foundItem || params?.id;
-  console.log(foundItemId);
-  const { data: singleFoundItem, isLoading } = useGetSingleFoundItemQuery(
-    params?.foundItem
-  );
+const SingleFoundItem = () => {
+  const { foundItem: foundItemParam } = useParams<{ foundItem: string }>();
+  const foundItemId = foundItemParam;
+
+  if (!foundItemId) {
+    return (
+      <div className="min-h-screen bg-gray-900 py-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-white mb-4">
+              Item Not Found
+            </h1>
+            <p className="text-gray-300 mb-6">
+              The requested item could not be found.
+            </p>
+            <Link
+              to="/foundItems"
+              className="inline-flex items-center text-blue-400 hover:text-blue-300"
+            >
+              <FaArrowLeft className="mr-2" />
+              Back to Found Items
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { data: singleFoundItem, isLoading } =
+    useGetSingleFoundItemQuery(foundItemId);
+
   const [createClaim, { isLoading: claimLoading }] = useCreateClaimMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
@@ -29,8 +53,32 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
     message: string;
   } | null>(null);
 
-  // console.log(params);
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
+
+  if (!foundItemId) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl border border-gray-700">
+            <div className="text-red-400 text-6xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Invalid Item ID
+            </h2>
+            <p className="text-gray-300 mb-6">
+              No valid item ID was provided. Please check the URL and try again.
+            </p>
+            <Link
+              to="/foundItems"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200"
+            >
+              <FaArrowLeft className="mr-2" />
+              Back to Found Items
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const {
     register,
@@ -44,7 +92,6 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
     setNotification(null);
   };
 
-  // Auto-dismiss success notifications
   useEffect(() => {
     if (notification?.type === "success") {
       const timer = setTimeout(() => {
@@ -60,7 +107,7 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
 
     try {
       const claimData = {
-        foundItemId: params?.foundItem,
+        foundItemId: foundItemId,
         distinguishingFeatures: data.distinguishingFeatures,
         lostDate: new Date(data.lostDate).toISOString(),
       };
@@ -102,7 +149,35 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
     );
   }
 
-  const foundItem = singleFoundItem?.data;
+  // Extract the item data from API response
+  const foundItemData = singleFoundItem?.data;
+
+  // Handle case where item is not found
+  if (!foundItemData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl border border-gray-700">
+            <div className="text-red-400 text-6xl mb-4">😞</div>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Item Not Found
+            </h2>
+            <p className="text-gray-300 mb-6">
+              The found item you're looking for doesn't exist or may have been
+              removed.
+            </p>
+            <Link
+              to="/foundItems"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200"
+            >
+              <FaArrowLeft className="mr-2" />
+              Back to Found Items
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -115,7 +190,7 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                 ? "bg-green-900 border border-green-500 text-green-100"
                 : "bg-red-900 border border-red-500 text-red-100"
             }`}
-          >
+          > 
             <div className="flex items-center justify-between">
               <p className="text-sm">{notification.message}</p>
               <button
@@ -141,7 +216,7 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
               Back to Found Items
             </Link>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              {foundItem?.foundItemName}
+              {foundItemData?.foundItemName || "Found Item"}
             </h1>
             <p className="text-gray-300">
               Found item details and claim information
@@ -158,8 +233,8 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                 <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl">
                   <img
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    src={foundItem?.img}
-                    alt={foundItem?.foundItemName}
+                    src={foundItemData?.img}
+                    alt={foundItemData?.foundItemName}
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/bgimg.png";
                     }}
@@ -169,7 +244,7 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
 
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4">
-                  {foundItem?.isClaimed ? (
+                  {foundItemData?.isClaimed ? (
                     <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg backdrop-blur-sm border border-green-400/50">
                       ✓ Claimed
                     </span>
@@ -190,7 +265,8 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                   Description
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
-                  {foundItem?.description}
+                  {foundItemData?.description ||
+                    "No description available for this item."}
                 </p>
               </div>
 
@@ -202,11 +278,16 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                     <span className="font-semibold">Date Found</span>
                   </div>
                   <p className="text-gray-300">
-                    {new Date(foundItem?.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
+                    {foundItemData?.date
+                      ? new Date(foundItemData.date).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )
+                      : "Date not specified"}
                   </p>
                 </div>
 
@@ -215,7 +296,9 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                     <FaMapMarkerAlt className="mr-3" />
                     <span className="font-semibold">Location</span>
                   </div>
-                  <p className="text-gray-300">{foundItem?.location}</p>
+                  <p className="text-gray-300">
+                    {foundItemData?.location || "Location not specified"}
+                  </p>
                 </div>
 
                 <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
@@ -223,7 +306,9 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                     <FaTag className="mr-3" />
                     <span className="font-semibold">Category</span>
                   </div>
-                  <p className="text-gray-300">{foundItem?.category?.name}</p>
+                  <p className="text-gray-300">
+                    {foundItemData?.category?.name || "Uncategorized"}
+                  </p>
                 </div>
 
                 <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 shadow-xl border border-gray-700">
@@ -231,7 +316,9 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                     <FaUser className="mr-3" />
                     <span className="font-semibold">Found By</span>
                   </div>
-                  <p className="text-gray-300">{foundItem?.user?.username}</p>
+                  <p className="text-gray-300">
+                    {foundItemData?.user?.username || "Anonymous"}
+                  </p>
                 </div>
               </div>
 
@@ -241,11 +328,11 @@ const SingleFoundItem = ({ params }: { params?: any }) => {
                   Claim Process
                 </h3>
                 <p className="text-gray-300 mb-6 leading-relaxed">
-                  {foundItem?.claimProcess ||
+                  {foundItemData?.claimProcess ||
                     "To claim this item, please provide the date you lost it and any distinguishing features that can help verify ownership."}
                 </p>
 
-                {!foundItem?.isClaimed ? (
+                {!foundItemData?.isClaimed ? (
                   <button
                     onClick={handleClaimModal}
                     className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg hover:shadow-xl"
