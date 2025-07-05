@@ -1,6 +1,18 @@
 import { FaUser } from "react-icons/fa";
 import StarRatings from "react-star-ratings";
-const testimonials = [
+import { useGetTestimonialsQuery } from "../../redux/api/api";
+import { Spinner } from "flowbite-react";
+
+interface Testimonial {
+  id?: string;
+  rating: number;
+  feedback: string;
+  name: string;
+  position: string;
+}
+
+// Fallback static data if no data from server
+const fallbackTestimonials: Testimonial[] = [
   {
     rating: 5,
     feedback:
@@ -25,49 +37,70 @@ const testimonials = [
 ];
 
 const Reviews = () => {
+  const { data: testimonialsData, isLoading } = useGetTestimonialsQuery({});
+
+  if (isLoading) {
+    return (
+      <section className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <div className="flex items-center justify-center">
+          <Spinner size="xl" />
+        </div>
+      </section>
+    );
+  }
+
+  // Use server data if available, otherwise fallback to static data
+  const testimonials: Testimonial[] =
+    testimonialsData?.data || fallbackTestimonials;
   return (
-    <section className="w-full pt-12 md:pt-20 lg:pt-24 bg-gray-900 text-white ">
-      <div className="container mx-auto grid items-center justify-center gap-4 px-4 text-center md:px-6">
-        <div className="space-y-3">
-          <h2 className=" text-4xl tracking-tight font-extrabold leading-tight text-gray-900 dark:text-white ">
-            What Our Customers Say
+    <section className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <div className="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl text-center">
+        <div className="space-y-4 mb-16">
+          <h2 className="text-4xl md:text-5xl tracking-tight font-extrabold leading-tight text-white">
+            What Our{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Customers
+            </span>{" "}
+            Say
           </h2>
-          <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-            Hear from the people
+          <p className="mb-6 font-light text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
+            Hear from the people who trust us with their lost and found items
           </p>
         </div>
-        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 bg-gray-00">
-          {testimonials?.map((e, i) => {
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials?.map((testimonial: Testimonial, i: number) => {
             return (
               <div
-                key={`${e.name + i}`}
-                className="flex flex-col items-center justify-center space-y-4 rounded-lg bg-gray p-6 shadow-sm"
+                key={`${testimonial.id || testimonial.name}-${i}`}
+                className="bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-xl border border-gray-700 p-8 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-gray-600 group"
               >
-                <div className="grid gap-1 text-center">
-                  <div className="text-center mx-auto rounded-full border p-3">
-                    <FaUser size="40" />
+                <div className="flex flex-col items-center space-y-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaUser size="24" className="text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">
+                      {testimonial.name}
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      {testimonial.position}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-semibold">{e.name}</h3>
-                  <p className="text-sm text-muted-foreground">{e.position}</p>
-                </div>
-                <div className="text-blue-600 flex justify-center gap-0.5">
-                  {/* <FaStar className="w-5 h-5 fill-primary" />
-            <FaStar className="w-5 h-5 fill-primary" />
-            <FaStar className="w-5 h-5 fill-primary" />
-            <FaStar className="w-5 h-5 fill-primary" />
-            <FaStar className="w-5 h-5 fill-primary" /> */}
 
-                  <StarRatings
-                    rating={e.rating}
-                    starDimension="25px"
-                    starSpacing="3px"
-                    starRatedColor="rgb(8 145 178)"
-                  />
-                </div>
+                  <div className="flex justify-center">
+                    <StarRatings
+                      rating={testimonial.rating}
+                      starDimension="20px"
+                      starSpacing="2px"
+                      starRatedColor="#3b82f6"
+                    />
+                  </div>
 
-                <blockquote className="text-center text-lg leading-relaxed">
-                  {e.feedback}
-                </blockquote>
+                  <blockquote className="text-center text-gray-300 leading-relaxed italic">
+                    "{testimonial.feedback}"
+                  </blockquote>
+                </div>
               </div>
             );
           })}
