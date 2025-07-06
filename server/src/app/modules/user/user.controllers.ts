@@ -74,6 +74,29 @@ const changeUserRole = async (
     });
   }
 };
+const softDeleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id;
+    const result = await userService.softDeleteUser(id);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "User deleted successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: "Failed to delete user",
+      data: null,
+    });
+  }
+};
 const allUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await userService.allUsers();
@@ -93,4 +116,5 @@ export const userController = {
   allUsers,
   blockUser,
   changeUserRole,
+  softDeleteUser,
 };

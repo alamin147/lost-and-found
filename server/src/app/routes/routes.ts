@@ -138,4 +138,7 @@ router.put("/block/user/:id",auth(), userController.blockUser);
 // change user role
 router.put("/change-role/:id",auth(), userController.changeUserRole);
 
+// soft delete user
+router.delete("/delete-user/:id",auth(), userController.softDeleteUser);
+
 export default router;
