@@ -71,6 +71,21 @@ router.get(
   "/item-categories",
   itemcategoryController.getItemCategory
 );
+
+// category update
+router.put(
+  "/item-categories/:id",
+  validateRequest(FoundItemCategorySchema.createFoundItemCategory),
+  auth(),
+  itemcategoryController.updateItemCategory
+);
+
+// category delete
+router.delete(
+  "/item-categories/:id",
+  auth(),
+  itemcategoryController.deleteItemCategory
+);
 // found item create
 router.post("/found-items",
   validateRequest(FoundItemSchema.createFoundItem),
