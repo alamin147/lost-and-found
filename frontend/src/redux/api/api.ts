@@ -26,10 +26,40 @@ const api = baseApi.injectEndpoints({
     category: builder.query({
       query: () => {
         return {
-          url: "/found-item-categories",
+          url: "/item-categories",
           method: "GET",
         };
       },
+      providesTags: ["categories"],
+    }),
+    createCategory: builder.mutation({
+      query: (data: any) => {
+        return {
+          url: "/item-categories",
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["categories"],
+    }),
+    updateCategory: builder.mutation({
+      query: ({ id, data }: { id: string; data: any }) => {
+        return {
+          url: `/item-categories/${id}`,
+          method: "PUT",
+          body: data,
+        };
+      },
+      invalidatesTags: ["categories"],
+    }),
+    deleteCategory: builder.mutation({
+      query: (id: string) => {
+        return {
+          url: `/item-categories/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["categories"],
     }),
 
     // lost item
@@ -41,6 +71,7 @@ const api = baseApi.injectEndpoints({
           params: data,
         };
       },
+      providesTags: ["mylostItems"],
     }),
     createLostItem: builder.mutation({
       query: (data: any) => {
@@ -96,7 +127,7 @@ const api = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ["myFoundItems"],
+      providesTags: ["myFoundItems", "foundItems"],
     }),
     createFoundItem: builder.mutation({
       query: (data: any) => {
@@ -115,6 +146,7 @@ const api = baseApi.injectEndpoints({
           params: data,
         };
       },
+      providesTags: ["foundItems"],
     }),
     getSingleFoundItem: builder.query({
       query: (id: string) => {
@@ -132,7 +164,7 @@ const api = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["myFoundItems"],
+      invalidatesTags: ["myFoundItems", "foundItems"],
     }),
     deleteMyFoundItem: builder.mutation({
       query: (id: string) => {
@@ -141,7 +173,7 @@ const api = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["myFoundItems"],
+      invalidatesTags: ["myFoundItems", "foundItems"],
     }),
 
     // change password
@@ -212,7 +244,150 @@ const api = baseApi.injectEndpoints({
           method: "PUT",
         };
       },
-      // invalidatesTags: ["adminData"],
+      invalidatesTags: ["users"],
+    }),
+
+    // change user role
+    changeUserRole: builder.mutation({
+      query: ({ id, role }: { id: string; role: string }) => {
+        return {
+          url: `/change-role/${id}`,
+          method: "PUT",
+          body: { role },
+        };
+      },
+      invalidatesTags: ["users"],
+    }),
+
+    // soft delete user
+    softDeleteUser: builder.mutation({
+      query: (id: string) => {
+        return {
+          url: `/delete-user/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["users"],
+    }),
+
+    // get all users
+    getAllUsers: builder.query({
+      query: () => {
+        return {
+          url: "/users",
+          method: "GET",
+        };
+      },
+      providesTags: ["users"],
+    }),
+
+    // get all claims (admin)
+    getAllClaims: builder.query({
+      query: () => {
+        return {
+          url: "/claims",
+          method: "GET",
+        };
+      },
+      providesTags: ["adminData"],
+    }),
+
+    // update claim status
+    updateClaimStatus: builder.mutation({
+      query: ({ claimId, ...data }: any) => {
+        return {
+          url: `/claims/${claimId}`,
+          method: "PUT",
+          body: data,
+        };
+      },
+      invalidatesTags: ["adminData"],
+    }),
+
+    // mark lost item as found
+    markLostItemAsFound: builder.mutation({
+      query: (data: any) => {
+        return {
+          url: "/found-lost",
+          method: "PUT",
+          body: data,
+        };
+      },
+      invalidatesTags: ["mylostItems", "foundItems"],
+    }),
+
+    // testimonials/reviews
+    getTestimonials: builder.query({
+      query: () => {
+        return {
+          url: "/testimonials",
+          method: "GET",
+        };
+      },
+      providesTags: ["testimonials"],
+    }),
+    createTestimonial: builder.mutation({
+      query: (data: any) => {
+        return {
+          url: "/testimonials",
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["testimonials"],
+    }),
+
+    // services
+    getServices: builder.query({
+      query: () => {
+        return {
+          url: "/services",
+          method: "GET",
+        };
+      },
+      providesTags: ["services"],
+    }),
+    createService: builder.mutation({
+      query: (data: any) => {
+        return {
+          url: "/services",
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["services"],
+    }),
+
+    // faqs
+    getFaqs: builder.query({
+      query: () => {
+        return {
+          url: "/faqs",
+          method: "GET",
+        };
+      },
+      providesTags: ["faqs"],
+    }),
+    createFaq: builder.mutation({
+      query: (data: any) => {
+        return {
+          url: "/faqs",
+          method: "POST",
+          body: data,
+        };
+      },
+      invalidatesTags: ["faqs"],
+    }),
+
+    // recent activity for dashboard
+    getRecentActivity: builder.query({
+      query: () => {
+        return {
+          url: "/recent-activity",
+          method: "GET",
+        };
+      },
+      providesTags: ["recentActivity"],
     }),
   }),
 });
@@ -222,6 +397,9 @@ export const {
   useLoginMutation,
   useRegistersMutation,
   useCategoryQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
   useCreateLostItemMutation,
   useGetSingleLostItemQuery,
   useCreateFoundItemMutation,
@@ -240,4 +418,17 @@ export const {
   useEditMyFoundItemMutation,
   useAdminStatsQuery,
   useBlockUserMutation,
+  useChangeUserRoleMutation,
+  useSoftDeleteUserMutation,
+  useGetAllUsersQuery,
+  useGetAllClaimsQuery,
+  useUpdateClaimStatusMutation,
+  useMarkLostItemAsFoundMutation,
+  useGetTestimonialsQuery,
+  useCreateTestimonialMutation,
+  useGetServicesQuery,
+  useCreateServiceMutation,
+  useGetFaqsQuery,
+  useCreateFaqMutation,
+  useGetRecentActivityQuery,
 } = api;
