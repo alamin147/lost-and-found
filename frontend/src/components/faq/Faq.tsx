@@ -1,7 +1,5 @@
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useState } from "react";
-import { useGetFaqsQuery } from "../../redux/api/api";
-import { Spinner } from "flowbite-react";
 
 interface FaqItem {
   id?: string;
@@ -11,7 +9,7 @@ interface FaqItem {
 
 const Faq = () => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const { data: faqsData, isLoading } = useGetFaqsQuery({});
+  //   const { data: faqsData, isLoading } = useGetFaqsQuery({});
 
   const toggleFaq = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -40,18 +38,7 @@ const Faq = () => {
     },
   ];
 
-  if (isLoading) {
-    return (
-      <div className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-        <div className="flex items-center justify-center">
-          <Spinner size="xl" />
-        </div>
-      </div>
-    );
-  }
-
-  // Use server data if available, otherwise fallback to static data
-  const faqs: FaqItem[] = faqsData?.data || defaultFaqs;
+  const faqs: FaqItem[] = defaultFaqs;
 
   return (
     <div className="py-16 lg:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
