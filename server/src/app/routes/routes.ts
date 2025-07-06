@@ -135,4 +135,7 @@ router.get("/admin/stats",auth(), adminStats);
 // block a user
 router.put("/block/user/:id",auth(), userController.blockUser);
 
+// change user role
+router.put("/change-role/:id",auth(), userController.changeUserRole);
+
 export default router;

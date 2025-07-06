@@ -50,6 +50,30 @@ const blockUser = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
+const changeUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id;
+    const { role } = req.body;
+    const result = await userService.changeUserRole(id, role);
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "User role changed successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: "Failed to change user role",
+      data: null,
+    });
+  }
+};
 const allUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await userService.allUsers();
@@ -68,4 +92,5 @@ export const userController = {
   registerUser,
   allUsers,
   blockUser,
+  changeUserRole,
 };
