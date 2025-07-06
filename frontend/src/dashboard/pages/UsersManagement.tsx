@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { FaTrash, FaSearch, FaShieldAlt, FaUser, FaBan } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useGetAllUsersQuery, useBlockUserMutation } from "../../redux/api/api";
+import {
+  useGetAllUsersQuery,
+  useBlockUserMutation,
+  useChangeUserRoleMutation,
+} from "../../redux/api/api";
 
 interface ApiUser {
   id: string;
@@ -9,7 +13,7 @@ interface ApiUser {
   email: string;
   activated: boolean;
   password: string;
-  role: "USER" | "ADMIN" | "MODERATOR";
+  role: "USER" | "ADMIN";
   createdAt: string;
   updatedAt: string;
   userImg: string;
@@ -19,7 +23,7 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: "USER" | "ADMIN" | "MODERATOR";
+  role: "USER" | "ADMIN";
   status: "ACTIVE" | "SUSPENDED" | "BANNED";
   createdAt: string;
   lastLogin?: string;
@@ -35,6 +39,7 @@ const UsersManagement = () => {
 
   const { data: allUsersData, isLoading } = useGetAllUsersQuery(undefined);
   const [blockUser] = useBlockUserMutation();
+  const [changeUserRole] = useChangeUserRoleMutation();
 
   // Transform API user data to match our interface
   const transformUser = (apiUser: ApiUser): User => ({
@@ -63,10 +68,13 @@ const UsersManagement = () => {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  const handleRoleChange = (_id: string, _newRole: string) => {
-    toast.info(
-      "Role change functionality needs to be implemented on the backend"
-    );
+  const handleRoleChange = async (id: string, newRole: string) => {
+    try {
+      await changeUserRole({ id, role: newRole }).unwrap();
+      toast.success("User role changed successfully");
+    } catch (error) {
+      toast.error("Failed to change user role");
+    }
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
@@ -87,26 +95,12 @@ const UsersManagement = () => {
     }
   };
 
-  const handleDelete = (_id: string) => {
-    // This would need to be implemented with an API call to delete user
-    // For now, just show a confirmation
-    if (
-      window.confirm(
-        "Are you sure you want to delete this user? This action cannot be undone."
-      )
-    ) {
-      toast.info(
-        "User deletion functionality needs to be implemented on the backend"
-      );
-    }
-  };
+  const handleDelete = (_id: string) => {};
 
   const getRoleColor = (role: string) => {
     switch (role) {
       case "ADMIN":
         return "bg-red-500";
-      case "MODERATOR":
-        return "bg-blue-500";
       case "USER":
         return "bg-green-500";
       default:
@@ -131,8 +125,6 @@ const UsersManagement = () => {
     switch (role) {
       case "ADMIN":
         return <FaShieldAlt className="text-red-500" />;
-      case "MODERATOR":
-        return <FaShieldAlt className="text-blue-500" />;
       case "USER":
         return <FaUser className="text-green-500" />;
       default:
@@ -255,7 +247,6 @@ const UsersManagement = () => {
             >
               <option value="ALL">All Roles</option>
               <option value="ADMIN">Admin</option>
-              <option value="MODERATOR">Moderator</option>
               <option value="USER">User</option>
             </select>
 
@@ -267,7 +258,6 @@ const UsersManagement = () => {
               <option value="ALL">All Status</option>
               <option value="ACTIVE">Active</option>
               <option value="SUSPENDED">Suspended</option>
-              <option value="BANNED">Banned</option>
             </select>
           </div>
         </div>
@@ -327,7 +317,6 @@ const UsersManagement = () => {
                       )}`}
                     >
                       <option value="USER">User</option>
-                      <option value="MODERATOR">Moderator</option>
                       <option value="ADMIN">Admin</option>
                     </select>
                   </td>
@@ -343,7 +332,6 @@ const UsersManagement = () => {
                     >
                       <option value="ACTIVE">Active</option>
                       <option value="SUSPENDED">Suspended</option>
-                      <option value="BANNED">Banned</option>
                     </select>
                   </td>
                   <td className="px-6 py-4 text-gray-300">
