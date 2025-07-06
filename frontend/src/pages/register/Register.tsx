@@ -60,15 +60,15 @@ const Register = () => {
 
   return (
     <>
-      <section className="min-h-screen flex items-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12">
-        <div className="flex flex-col items-center justify-center px-6 mx-auto">
-          <div className="w-full max-w-lg bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 dark:bg-gray-800/90 dark:border-gray-700 dark:shadow-gray-900/50">
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black py-12">
+        <div className="flex flex-col items-center justify-center px-6 mx-auto w-full">
+          <div className="w-full max-w-lg bg-gradient-to-br from-gray-800/90 via-gray-900/90 to-black/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700">
             <div className="p-8 space-y-6">
               <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   Create Account
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-300">
                   Join our lost and found community
                 </p>
               </div>
@@ -80,7 +80,7 @@ const Register = () => {
                 action="#"
               >
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-semibold text-gray-300">
                     Email Address
                   </label>
                   <div className="relative">
@@ -89,7 +89,7 @@ const Register = () => {
                       {...register("email", {
                         required: "Email is required",
                       })}
-                      className="bg-gray-50/50 border-2 border-gray-200 text-gray-900 text-sm rounded-xl focus:border-blue-400 block w-full p-3.5 pr-12 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-400 transition-all duration-200 hover:border-gray-300 outline-none"
+                      className="bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 backdrop-blur-sm w-full"
                       placeholder="name@company.com"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -104,7 +104,7 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-semibold text-gray-300">
                     Username
                   </label>
                   <div className="relative">
@@ -114,7 +114,7 @@ const Register = () => {
                         required: "Username is required",
                       })}
                       placeholder="Choose a username"
-                      className="bg-gray-50/50 border-2 border-gray-200 text-gray-900 text-sm rounded-xl focus:border-blue-400 block w-full p-3.5 pr-12 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-400 transition-all duration-200 hover:border-gray-300 outline-none"
+                      className="bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 backdrop-blur-sm w-full"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                       <MdPerson className="w-5 h-5 text-gray-400" />
@@ -128,7 +128,7 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-semibold text-gray-300">
                     Profile Image URL
                   </label>
                   <div className="relative">
@@ -136,7 +136,7 @@ const Register = () => {
                       type="text"
                       {...register("userImg")}
                       placeholder="https://example.com/your-image.jpg"
-                      className="bg-gray-50/50 border-2 border-gray-200 text-gray-900 text-sm rounded-xl focus:border-blue-400 block w-full p-3.5 pr-12 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-400 transition-all duration-200 hover:border-gray-300 outline-none"
+                      className="bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 backdrop-blur-sm w-full"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                       <MdImage className="w-5 h-5 text-gray-400" />
