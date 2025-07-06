@@ -14,7 +14,24 @@ const getItemCategory = async () => {
   return result;
 };
 
+const updateItemCategory = async (id: string, data: Partial<ItemCategory>) => {
+  const result = await prisma.itemCategory.update({
+    where: { id },
+    data: data,
+  });
+  return result;
+};
+
+const deleteItemCategory = async (id: string) => {
+  const result = await prisma.itemCategory.delete({
+    where: { id },
+  });
+  return result;
+};
+
 export const itemcategoryService = {
   createItemCategory,
   getItemCategory,
+  updateItemCategory,
+  deleteItemCategory,
 };
