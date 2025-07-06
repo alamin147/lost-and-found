@@ -113,7 +113,9 @@ const getMyFoundItem = async (user: JwtPayload) => {
 
 const editMyFoundItem = async (data: any) => {
   const updateData: any = {};
-
+  if (data?.foundItemName) {
+    updateData.foundItemName = data?.foundItemName;
+  }
   if (data?.location) {
     updateData.location = data?.location;
   }

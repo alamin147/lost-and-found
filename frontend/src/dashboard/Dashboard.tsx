@@ -4,10 +4,10 @@ import {
   FaClipboardList,
   FaExclamationTriangle,
   FaChartLine,
-  FaArrowUp,
 } from "react-icons/fa";
 import { useAdminStatsQuery } from "../redux/api/api";
 import { Spinner } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { data: adminStats, isLoading } = useAdminStatsQuery({});
@@ -18,42 +18,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
-  const stats = [
-    {
-      title: "Total Found Items",
-      value: adminStats?.data?.foundItems || "0",
-      change: "+12%",
-      changeType: "increase",
-      icon: <FaBoxOpen className="w-6 h-6" />,
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      title: "Total Lost Items",
-      value: adminStats?.data?.lostItems || "0",
-      change: "+8%",
-      changeType: "increase",
-      icon: <FaExclamationTriangle className="w-6 h-6" />,
-      color: "from-red-500 to-red-600",
-    },
-    {
-      title: "Pending Claims",
-      value: adminStats?.data?.pendingClaims || "0",
-      change: "+5%",
-      changeType: "increase",
-      icon: <FaClipboardList className="w-6 h-6" />,
-      color: "from-yellow-500 to-yellow-600",
-    },
-    {
-      title: "Active Users",
-      value: adminStats?.data?.totalUsers || "0",
-      change: "+18%",
-      changeType: "increase",
-      icon: <FaUsers className="w-6 h-6" />,
-      color: "from-green-500 to-green-600",
-    },
-  ];
-
   const recentActivity = [
     {
       id: 1,
@@ -70,7 +34,7 @@ const Dashboard = () => {
       status: "pending",
     },
     {
-      id: 3,
+      id: "3",
       type: "lost",
       title: "MacBook reported lost in Cafeteria",
       time: "6 hours ago",
@@ -99,45 +63,70 @@ const Dashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition-all duration-200"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-lg bg-gradient-to-r text-white`}>
-                {stat.icon}
-              </div>
-              <div
-                className={`flex items-center text-sm ${
-                  stat.changeType === "increase"
-                    ? "text-green-400"
-                    : "text-red-400"
-                }`}
-              >
-                <FaArrowUp className="w-4 h-4 mr-1" />
-                {stat.change}
-              </div>
-            </div>
-
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-1">
-                {stat.value}
-              </h3>
-              <p className="text-gray-400 text-sm">{stat.title}</p>
+              <p className="text-gray-400 text-sm">Total Found Items</p>
+              <p className="text-2xl font-bold text-white">
+                {adminStats?.data?.foundItems || "0"}
+              </p>
+            </div>
+            <div className="bg-gray-500 p-3 rounded-lg">
+              <FaBoxOpen className="text-white" />
             </div>
           </div>
-        ))}
+        </div>
+
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Total Lost Items</p>
+              <p className="text-2xl font-bold text-red-500">
+                {adminStats?.data?.lostItems || "0"}
+              </p>
+            </div>
+            <div className="bg-gray-500 p-3 rounded-lg">
+              <FaExclamationTriangle className="text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Pending Claims</p>
+              <p className="text-2xl font-bold text-yellow-500">
+                {adminStats?.data?.pendingClaims || "0"}
+              </p>
+            </div>
+            <div className="bg-gray-500 p-3 rounded-lg">
+              <FaClipboardList className="text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Active Users</p>
+              <p className="text-2xl font-bold text-green-500">
+                {adminStats?.data?.totalUsers || "0"}
+              </p>
+            </div>
+            <div className="bg-gray-500 p-3 rounded-lg">
+              <FaUsers className="text-white" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Activity Feed */}
-        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700">
+        <div className="bg-gradient-to-br from-gray-800 rounded-2xl p-6 border border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-white">Recent Activity</h2>
           </div>
-
           <div className="space-y-4">
             {recentActivity.map((activity) => (
               <div
@@ -186,25 +175,26 @@ const Dashboard = () => {
           <h2 className="text-xl font-bold text-white mb-6">Quick Actions</h2>
 
           <div className="space-y-3">
-            <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 rounded-lg transition-all duration-200 text-white font-medium">
-              <span>Add New Category</span>
-              <FaChartLine className="w-5 h-5" />
-            </button>
+            <Link to="/dashboard/categories">
+              <button className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-color rounded-lg transition-all duration-200 text-white font-medium">
+                <span>Add New Category</span>
+                <FaChartLine className="w-5 h-5" />
+              </button>
+            </Link>
 
-            <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-all duration-200 text-white font-medium">
-              <span>Generate Report</span>
-              <FaClipboardList className="w-5 h-5" />
-            </button>
+            <Link to="/dashboard/users">
+              <button className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-color rounded-lg transition-all duration-200 text-white font-medium">
+                <span>Manage Users</span>
+                <FaUsers className="w-5 h-5" />
+              </button>
+            </Link>
 
-            <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg transition-all duration-200 text-white font-medium">
-              <span>Manage Users</span>
-              <FaUsers className="w-5 h-5" />
-            </button>
-
-            <button className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 rounded-lg transition-all duration-200 text-white font-medium">
-              <span>System Settings</span>
-              <FaBoxOpen className="w-5 h-5" />
-            </button>
+            <Link to="/dashboard/settings">
+              <button className="w-full flex items-center justify-between p-4 hover:bg-gray-700/50 transition-color rounded-lg transition-all duration-200 text-white font-medium">
+                <span>Settings</span>
+                <FaBoxOpen className="w-5 h-5" />
+              </button>
+            </Link>
           </div>
         </div>
       </div>
