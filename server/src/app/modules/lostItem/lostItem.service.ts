@@ -77,23 +77,48 @@ const getMyLostItem = async (user: JwtPayload) => {
   return result;
 };
 
-const editMyLostItem = async (data: any) => {
+const editMyLostItem = async (data: any, user?: JwtPayload) => {
   const updateData: any = {};
 
+  if (data?.lostItemName) {
+    updateData.lostItemName = data.lostItemName;
+  }
   if (data?.location) {
-    updateData.location = data?.location;
+    updateData.location = data.location;
   }
   if (data?.date) {
-    updateData.date = data?.date;
+    updateData.date = data.date;
   }
   if (data?.description) {
-    updateData.description = data?.description;
+    updateData.description = data.description;
   }
+  if (data?.categoryId) {
+    updateData.categoryId = data.categoryId;
+  }
+  if (data?.img) {
+    updateData.img = data.img;
+  }
+
+  // If user is provided, ensure they can only edit their own items
+  const whereClause: any = { id: data.id };
+  if (user) {
+    whereClause.userId = user.id;
+  }
+
   const result = await prisma.lostItem.update({
-    where: {
-      id: data.id,
-    },
+    where: whereClause,
     data: updateData,
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      category: true,
+    },
   });
   return result;
 };

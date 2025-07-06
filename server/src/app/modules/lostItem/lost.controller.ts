@@ -103,15 +103,15 @@ const getMyLostItem = async (req: Request, res: Response) => {
 };
 
 const editMyLostItem = async (req: Request, res: Response) => {
-  const data = req.body;
-  const user = req.user
-  await lostTItemServices.editMyLostItem(data);
   try {
+    const data = req.body;
+    const user = req.user;
+    const result = await lostTItemServices.editMyLostItem(data, user);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
       message: "Lost item edited successfully",
-      data: null,
+      data: result,
     });
   } catch (error: any) {
     sendResponse(res, {

@@ -5,6 +5,8 @@ import {
   useGetLostItemsQuery,
   useDeleteMyLostItemMutation,
   useMarkLostItemAsFoundMutation,
+  useEditMyLostItemMutation,
+  useCategoryQuery,
 } from "../../redux/api/api";
 import { IoMdRadioButtonOn } from "react-icons/io";
 interface LostItem {
@@ -12,6 +14,7 @@ interface LostItem {
   lostItemName: string;
   description: string;
   category: {
+    id: string;
     name: string;
   };
   location: string;
@@ -27,6 +30,16 @@ const LostItemsManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<LostItem | null>(null);
+  const [isEditLoading, setIsEditLoading] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    lostItemName: "",
+    description: "",
+    location: "",
+    date: "",
+    categoryId: "",
+  });
 
   const {
     data: lostItemsData,
@@ -38,9 +51,48 @@ const LostItemsManagement = () => {
     sortOrder: "asc",
   });
 
+  const { data: categoriesData } = useCategoryQuery({});
   console.log("first", lostItemsData);
   const [deleteMyLostItem] = useDeleteMyLostItemMutation();
   const [markAsFound] = useMarkLostItemAsFoundMutation();
+  const [editMyLostItem] = useEditMyLostItemMutation();
+  const handleEdit = (item: LostItem) => {
+    setEditingItem(item);
+    setEditFormData({
+      lostItemName: item.lostItemName,
+      description: item.description,
+      location: item.location,
+      date: new Date(item.date).toISOString().split("T")[0],
+      categoryId: item.category?.id || "",
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingItem) return;
+
+    setIsEditLoading(true);
+    try {
+      await editMyLostItem({
+        id: editingItem.id,
+        ...editFormData,
+        date: new Date(editFormData.date).toISOString(),
+      }).unwrap();
+      toast.success("Item updated successfully");
+      setIsEditModalOpen(false);
+      setEditingItem(null);
+    } catch (error) {
+      toast.error("Failed to update item");
+    } finally {
+      setIsEditLoading(false);
+    }
+  };
+
+  const handleEditCancel = () => {
+    setIsEditModalOpen(false);
+    setEditingItem(null);
+  };
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
@@ -274,7 +326,10 @@ const LostItemsManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">
-                      <button className="p-2 text-yellow-500 hover:bg-yellow-500 hover:text-white rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleEdit(item)}
+                        className="p-2 text-yellow-500 hover:bg-yellow-500 hover:text-white rounded-lg transition-colors"
+                      >
                         <FaEdit />
                       </button>
                       {!item.isFound && (
@@ -309,6 +364,163 @@ const LostItemsManagement = () => {
           </div>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h2 className="text-xl font-bold text-white mb-4">
+              Edit Lost Item
+            </h2>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-1">
+                  Item Name
+                </label>
+                <input
+                  type="text"
+                  value={editFormData.lostItemName}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      lostItemName: e.target.value,
+                    })
+                  }
+                  disabled={isEditLoading}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={editFormData.description}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      description: e.target.value,
+                    })
+                  }
+                  disabled={isEditLoading}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-1">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  value={editFormData.location}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      location: e.target.value,
+                    })
+                  }
+                  disabled={isEditLoading}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-1">
+                  Date Lost
+                </label>
+                <input
+                  type="date"
+                  value={editFormData.date}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      date: e.target.value,
+                    })
+                  }
+                  disabled={isEditLoading}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-1">
+                  Category
+                </label>
+                <select
+                  value={editFormData.categoryId}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      categoryId: e.target.value,
+                    })
+                  }
+                  disabled={isEditLoading}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-gray-600 disabled:cursor-not-allowed"
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categoriesData?.data?.map((category: any) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <button
+                  type="submit"
+                  disabled={isEditLoading}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isEditLoading ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Changes"
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleEditCancel}
+                  disabled={isEditLoading}
+                  className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
