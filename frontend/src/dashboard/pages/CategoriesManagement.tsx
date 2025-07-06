@@ -169,7 +169,7 @@ const CategoriesManagement = () => {
                 {categories.length}
               </p>
             </div>
-            <div className="bg-blue-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaBoxOpen className="text-white" />
             </div>
           </div>
@@ -190,7 +190,7 @@ const CategoriesManagement = () => {
                 }
               </p>
             </div>
-            <div className="bg-green-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaBoxOpen className="text-white" />
             </div>
           </div>
