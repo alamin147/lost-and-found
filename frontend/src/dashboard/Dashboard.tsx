@@ -11,7 +11,6 @@ import { Spinner } from "flowbite-react";
 
 const Dashboard = () => {
   const { data: adminStats, isLoading } = useAdminStatsQuery({});
-  console.log("first", adminStats);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">

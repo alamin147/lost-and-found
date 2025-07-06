@@ -4,6 +4,7 @@ import sendResponse from "../global/response";
 import { StatusCodes } from "http-status-codes";
 import { lostTItemServices } from "../modules/lostItem/lostItem.service";
 import { userService } from "../modules/user/user.service";
+import { claimsService } from "../modules/claim/claim.service";
 
 export const adminStats = async (req: Request, res: Response) => {
   const result: any = {};
@@ -11,6 +12,13 @@ export const adminStats = async (req: Request, res: Response) => {
     const foundItems = await foundItemService.getFoundItem({});
     const lostItems = await lostTItemServices.getLostItem();
     const totalUsers = await userService.allUsers();
+    const claims = await claimsService.getClaim();
+    let pendingClaims = 0;
+    if (claims) {
+      pendingClaims = claims.filter((claim) => claim.status === "PENDING").length;
+      result.pendingClaims = pendingClaims|0;
+       result.totalClaims = claims.length | 0;
+    }
     const total = (foundItems.length + lostItems.length) | 0;
     result.total = total;
     // console.log(foundItems);
