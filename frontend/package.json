@@ -15,13 +15,15 @@
     "flowbite-react": "^0.11.8",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.59.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.30.1",
     "react-star-ratings": "^2.3.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "recharts": "^3.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
