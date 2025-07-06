@@ -6,15 +6,54 @@ import {
   FaChartLine,
 } from "react-icons/fa";
 import { useAdminStatsQuery } from "../redux/api/api";
-import { Spinner } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { data: adminStats, isLoading } = useAdminStatsQuery({});
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="xl" />
+      <div className="space-y-6 p-6">
+        <div className="animate-pulse">
+          {/* Welcome Section Skeleton */}
+          <div className="bg-gray-700 rounded-2xl h-32 mb-6"></div>
+
+          {/* Stats Grid Skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-gray-700 rounded-xl h-24"></div>
+            ))}
+          </div>
+
+          {/* Recent Activity Section Skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Activity Feed Skeleton */}
+            <div className="bg-gray-700 rounded-2xl p-6">
+              <div className="h-6 bg-gray-600 rounded w-1/3 mb-6"></div>
+              <div className="space-y-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-start space-x-3 p-3">
+                    <div className="w-2 h-2 bg-gray-600 rounded-full mt-2"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gray-600 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-600 rounded w-1/4"></div>
+                    </div>
+                    <div className="h-6 bg-gray-600 rounded-full w-16"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Actions Skeleton */}
+            <div className="bg-gray-700 rounded-2xl p-6">
+              <div className="h-6 bg-gray-600 rounded w-1/3 mb-6"></div>
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-16 bg-gray-600 rounded-lg"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
