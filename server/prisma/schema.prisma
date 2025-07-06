@@ -71,6 +71,8 @@ model LostItem {
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
   isFound      Boolean            @default(false)
+  isDeleted    Boolean            @default(false)
+  deletedAt    DateTime?
   user         User               @relation(fields: [userId], references: [id])
 
   @@map("lostItems")
