@@ -30,6 +30,9 @@ const FoundItemsManagement = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<FoundItem | null>(null);
   const [isEditLoading, setIsEditLoading] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<FoundItem | null>(null);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [editForm, setEditForm] = useState({
     foundItemName: "",
     description: "",
@@ -97,16 +100,31 @@ const FoundItemsManagement = () => {
     });
   };
 
-  const handleDelete = async (id: string) => {
-    //TODO: good alert
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      try {
-        await deleteFoundItem(id).unwrap();
-        toast.success("Item deleted successfully");
-      } catch (error) {
-        toast.error("Failed to delete item");
-      }
+  const handleDelete = (item: FoundItem) => {
+    setDeletingItem(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingItem) return;
+
+    setIsDeleteLoading(true);
+    try {
+      await deleteFoundItem(deletingItem.id).unwrap();
+      toast.success("Item deleted successfully");
+      setIsDeleteModalOpen(false);
+      setDeletingItem(null);
+    } catch (error) {
+      toast.error("Failed to delete item");
+    } finally {
+      setIsDeleteLoading(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+    setDeletingItem(null);
+    setIsDeleteLoading(false);
   };
 
   if (isLoading) {
@@ -330,7 +348,7 @@ const FoundItemsManagement = () => {
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => handleDelete(item)}
                         className="p-2 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors"
                       >
                         <FaTrash />
@@ -465,6 +483,90 @@ const FoundItemsManagement = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4 border border-gray-700">
+            <div className="text-center">
+              <div className="mb-4">
+                <div className="bg-gray-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                  <FaTrash className="text-red-600 text-xl" />
+                </div>
+                <h2 className="text-xl font-bold text-white mb-2">
+                  Delete Found Item
+                </h2>
+                <p className="text-gray-400 mb-4">
+                  Are you sure you want to delete this item? This action cannot
+                  be undone.
+                </p>
+              </div>
+
+              {deletingItem && (
+                <div className="bg-gray-700 rounded-lg p-4 mb-6 text-left">
+                  <h3 className="font-medium text-white mb-2">
+                    {deletingItem.foundItemName}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-2">
+                    {deletingItem.description}
+                  </p>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>Location: {deletingItem.location}</span>
+                    <span>
+                      Date: {new Date(deletingItem.date).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleDeleteCancel}
+                  disabled={isDeleteLoading}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-500 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteConfirm}
+                  disabled={isDeleteLoading}
+                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                >
+                  {isDeleteLoading ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Deleting...
+                    </>
+                  ) : (
+                    "Delete Item"
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
