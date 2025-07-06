@@ -44,8 +44,52 @@ const getItemCategory = async (req: Request, res: Response) => {
   }
 };
 
+const updateItemCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    const result = await itemcategoryService.updateItemCategory(id, data);
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Item category updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
+
+const deleteItemCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await itemcategoryService.deleteItemCategory(id);
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Item category deleted successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: error?.message,
+      data: null,
+    });
+  }
+};
 
 export const itemcategoryController = {
   createItemCategory,
   getItemCategory,
+  updateItemCategory,
+  deleteItemCategory,
 };
