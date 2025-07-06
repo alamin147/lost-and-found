@@ -81,8 +81,30 @@ const blockUser = async (id: string) => {
   }
 };
 
+const changeUserRole = async (id: string, role: string) => {
+  const updatedUser = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      role: role as any, // Since role is an enum in Prisma
+    },
+  });
+
+  return {
+    id: updatedUser.id,
+    username: updatedUser.username,
+    email: updatedUser.email,
+    role: updatedUser.role,
+    activated: updatedUser.activated,
+    createdAt: updatedUser.createdAt,
+    updatedAt: updatedUser.updatedAt,
+  };
+};
+
 export const userService = {
   registerUser,
   allUsers,
   blockUser,
+  changeUserRole,
 };
