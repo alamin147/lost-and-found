@@ -1,7 +1,5 @@
 import { signOut, useUserVerification } from "../../auth/auth";
 import {
-  Avatar,
-  Button,
   Dropdown,
   Navbar,
   NavbarBrand,
@@ -15,6 +13,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Modals from "../modal/Modal";
 import { ToastContainer } from "react-toastify";
+import { FaSearch, FaUser, FaCog, FaSignOutAlt, FaList, FaHome, FaTachometerAlt } from "react-icons/fa";
 
 export function Navbars() {
   const navigate = useNavigate();
@@ -29,85 +28,179 @@ export function Navbars() {
     <>
       <Navbar
         fluid
-        className="sticky top-0 z-50 bg-white border- border-gray-200 dark:bg-gray-900 dark:border-gray-700"
+        className="sticky top-0 z-50 bg-gradient-to-r from-gray-800 to-gray-900 backdrop-blur-md border-b border-gray-700 shadow-2xl"
       >
         <NavbarBrand href="/">
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Lost & Found
-          </span>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+              <FaSearch className="text-white text-lg" />
+            </div>
+            <div className="hidden sm:block">
+              <span className="self-center whitespace-nowrap text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Lost & Found
+              </span>
+              <p className="text-gray-400 text-xs">Find what matters</p>
+            </div>
+          </div>
         </NavbarBrand>
         <div className="flex md:order-2">
           {users?.email ? (
-            <Dropdown
-              arrowIcon={false}
-              inline
-              label={
-                users?.userImg ? (
-                  <Avatar alt="User settings" img={users?.userImg} className="" rounded size="sm" />
-                ) : (
-                  <Avatar
-                    alt="User settings"
-                    rounded className=""
-                    size="sm"
-                    placeholderInitials={
-                      users?.username?.charAt(0)?.toUpperCase() ||
-                      users?.email?.charAt(0)?.toUpperCase() ||
-                      "U"
-                    }
-                  />
-                )
-              }
-            >
-              <DropdownHeader>
-                <span className="block text-sm">
-                  {users?.email ? users?.email : "User"}
-                </span>
-                <span className="block truncate text-sm font-medium"></span>
-              </DropdownHeader>
-              {users?.role == "ADMIN" && (
-                <DropdownItem>
-                  <Link to="/dashboard">Dashboard</Link>
+            <div className="flex items-center space-x-3">
+              {/* User info - hidden on mobile */}
+              <div className="hidden lg:block text-right">
+                <p className="text-white text-sm font-medium">
+                  {users?.email?.split("@")[0] || "User"}
+                </p>
+                <p className="text-gray-400 text-xs">{users?.role || "USER"}</p>
+              </div>
+
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={
+                  <div className="relative group cursor-pointer">
+                    {users?.userImg ? (
+                      <img
+                        src={users?.userImg}
+                        alt="User"
+                        className="w-10 h-10 rounded-full border-2 border-gray-600 group-hover:border-cyan-400 transition-all duration-200 shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center border-2 border-gray-600 group-hover:border-cyan-400 transition-all duration-200 shadow-lg">
+                        <span className="text-white font-semibold text-sm">
+                          {users?.username?.charAt(0)?.toUpperCase() ||
+                            users?.email?.charAt(0)?.toUpperCase() ||
+                            "U"}
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-gray-800 rounded-full"></div>
+                  </div>
+                }
+                className="bg-gray-800 border border-gray-700 shadow-2xl"
+              >
+                <DropdownHeader className="bg-gray-700/50">
+                  <div className="flex items-center space-x-3 py-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-semibold text-xs">
+                        {users?.email?.charAt(0)?.toUpperCase() || "U"}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="block text-white font-medium text-sm">
+                        {users?.email ? users?.email : "User"}
+                      </span>
+                      <span className="block text-gray-400 text-xs">{users?.role}</span>
+                    </div>
+                  </div>
+                </DropdownHeader>
+
+                {users?.role === "ADMIN" && (
+                  <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
+                    <Link to="/dashboard" className="flex items-center space-x-2 w-full">
+                      <FaTachometerAlt className="text-cyan-400" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownItem>
+                )}
+
+                <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
+                  <Link to="/dashboard/settings" className="flex items-center space-x-2 w-full">
+                    <FaCog className="text-blue-400" />
+                    <span>Settings</span>
+                  </Link>
                 </DropdownItem>
-              )}
-              <DropdownItem>
-                <Link to="/settings/changeEmail">Settings</Link>
-              </DropdownItem>
-              <DropdownItem>
-                <Link to="/lostItems/myLostItems">My lost items</Link>
-              </DropdownItem>
-              <DropdownItem>
-                <Link to="/foundItems/myFoundItems">My found items</Link>
-              </DropdownItem>
-              <DropdownItem>
-                <Link to="/myClaimRequest">My claims</Link>
-              </DropdownItem>
-              <DropdownDivider />
-              <DropdownItem onClick={handleSignOut}>Sign out</DropdownItem>
-            </Dropdown>
+
+                <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
+                  <Link to="/dashboard/myLostItems" className="flex items-center space-x-2 w-full">
+                    <FaList className="text-yellow-400" />
+                    <span>My lost items</span>
+                  </Link>
+                </DropdownItem>
+
+                <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
+                  <Link to="/dashboard/myFoundItems" className="flex items-center space-x-2 w-full">
+                    <FaSearch className="text-green-400" />
+                    <span>My found items</span>
+                  </Link>
+                </DropdownItem>
+
+                <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
+                  <Link to="/dashboard/myClaimRequest" className="flex items-center space-x-2 w-full">
+                    <FaUser className="text-purple-400" />
+                    <span>My claims</span>
+                  </Link>
+                </DropdownItem>
+
+                <DropdownDivider className="border-gray-600" />
+
+                <DropdownItem
+                  onClick={handleSignOut}
+                  className="hover:bg-red-600 text-gray-300 hover:text-white"
+                >
+                  <div className="flex items-center space-x-2 w-full">
+                    <FaSignOutAlt className="text-red-400" />
+                    <span>Sign out</span>
+                  </div>
+                </DropdownItem>
+              </Dropdown>
+            </div>
           ) : (
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Link to="/login">
-                {" "}
-                <Button color="dark">Login</Button>
+                <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-sm">
+                  Login
+                </button>
               </Link>
               <Link to="/register">
-                {" "}
-                <Button>Register</Button>
+                <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-2.5 px-5 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
+                  Register
+                </button>
               </Link>
             </div>
           )}
           <NavbarToggle />
         </div>
         <NavbarCollapse>
-          <NavbarLink href="/" active>
-            Home
+          <NavbarLink
+            href="/"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium flex items-center space-x-2"
+          >
+            <FaHome className="text-sm" />
+            <span>Home</span>
           </NavbarLink>
-          <NavbarLink href="#aboutUs">About us</NavbarLink>
-          <NavbarLink href="/lostItems">Lost items</NavbarLink>
-          <NavbarLink href="/foundItems">Found items</NavbarLink>
+          <NavbarLink
+            href="#aboutUs"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
+          >
+            About us
+          </NavbarLink>
+          <NavbarLink
+            href="/lostItems"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
+          >
+            Lost items
+          </NavbarLink>
+          <NavbarLink
+            href="/foundItems"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
+          >
+            Found items
+          </NavbarLink>
         </NavbarCollapse>
       </Navbar>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }
