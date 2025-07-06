@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaTrash, FaEye, FaSearch, FaCheck, FaTimes } from "react-icons/fa";
+import { FaEye, FaSearch, FaCheck, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import {
   useGetAllClaimsQuery,
@@ -10,11 +10,9 @@ const ClaimsManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState<any>(null);
   const [newStatus, setNewStatus] = useState("");
   const [isStatusLoading, setIsStatusLoading] = useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   const { data: allClaims, isLoading } = useGetAllClaimsQuery(undefined);
   const [updateClaimStatus] = useUpdateClaimStatusMutation();
@@ -76,29 +74,6 @@ const ClaimsManagement = () => {
     setSelectedClaim(null);
     setNewStatus("");
     setIsStatusLoading(false);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (!selectedClaim) return;
-
-    setIsDeleteLoading(true);
-    try {
-      // This would typically make an API call to delete the claim
-      // For now, we'll just show a success message
-      toast.success("Claim deleted successfully");
-      setIsDeleteModalOpen(false);
-      setSelectedClaim(null);
-    } catch (error) {
-      toast.error("Failed to delete claim");
-    } finally {
-      setIsDeleteLoading(false);
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setIsDeleteModalOpen(false);
-    setSelectedClaim(null);
-    setIsDeleteLoading(false);
   };
 
   const handleBulkApprove = async () => {
@@ -179,7 +154,7 @@ const ClaimsManagement = () => {
             className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
           >
             <FaCheck className="mr-2" />
-            Bulk Approve Pending
+            Bulk/All Approve Pending
           </button>
         </div>
       </div>
@@ -192,7 +167,7 @@ const ClaimsManagement = () => {
               <p className="text-gray-400 text-sm">Total Claims</p>
               <p className="text-2xl font-bold text-white">{claims.length}</p>
             </div>
-            <div className="bg-purple-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaEye className="text-white" />
             </div>
           </div>
@@ -209,7 +184,7 @@ const ClaimsManagement = () => {
                 }
               </p>
             </div>
-            <div className="bg-yellow-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaSearch className="text-white" />
             </div>
           </div>
@@ -226,7 +201,7 @@ const ClaimsManagement = () => {
                 }
               </p>
             </div>
-            <div className="bg-green-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaCheck className="text-white" />
             </div>
           </div>
@@ -243,7 +218,7 @@ const ClaimsManagement = () => {
                 }
               </p>
             </div>
-            <div className="bg-red-500 p-3 rounded-lg">
+            <div className="bg-gray-500 p-3 rounded-lg">
               <FaTimes className="text-white" />
             </div>
           </div>
@@ -504,111 +479,6 @@ const ClaimsManagement = () => {
                     </>
                   ) : (
                     "Update Status"
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4 border border-gray-700">
-            <div className="text-center">
-              <div className="mb-4">
-                <div className="bg-gray-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <FaTrash className="text-red-600 text-xl" />
-                </div>
-                <h2 className="text-xl font-bold text-white mb-2">
-                  Delete Claim
-                </h2>
-                <p className="text-gray-400 mb-4">
-                  Are you sure you want to delete this claim? This action cannot
-                  be undone.
-                </p>
-              </div>
-
-              {selectedClaim && (
-                <div className="bg-gray-700 rounded-lg p-4 mb-6 text-left">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <img
-                      src={selectedClaim.foundItem?.img || "/default-item.png"}
-                      alt={selectedClaim.foundItem?.foundItemName}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
-                    <div>
-                      <h3 className="font-medium text-white">
-                        {selectedClaim.foundItem?.foundItemName}
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {selectedClaim.foundItem?.category?.name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-sm text-gray-400 mb-2">
-                    Distinguishing Features:{" "}
-                    {selectedClaim.distinguishingFeatures ||
-                      "No details provided"}
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>
-                      Status:
-                      <span
-                        className={`ml-1 px-2 py-1 rounded-full text-xs font-medium text-white ${getStatusColor(
-                          selectedClaim.status
-                        )}`}
-                      >
-                        {selectedClaim.status}
-                      </span>
-                    </span>
-                    <span>Lost Date: {formatDate(selectedClaim.lostDate)}</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={handleDeleteCancel}
-                  disabled={isDeleteLoading}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-500 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDeleteConfirm}
-                  disabled={isDeleteLoading}
-                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
-                >
-                  {isDeleteLoading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Deleting...
-                    </>
-                  ) : (
-                    "Delete Claim"
                   )}
                 </button>
               </div>
