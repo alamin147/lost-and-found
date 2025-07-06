@@ -36,15 +36,15 @@ const Login = () => {
 
   return (
     <>
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12">
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black py-12">
         <div className="flex flex-col items-center justify-center px-6 mx-auto w-full">
-          <div className="w-full max-w-lg bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200 dark:bg-gray-800/90 dark:border-gray-700 dark:shadow-gray-900/50">
+          <div className="w-full max-w-lg bg-gradient-to-br from-gray-800/90 via-gray-900/90 to-black/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700">
             <div className="p-8 space-y-6">
               <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                   Welcome Back
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-300">
                   Sign in to your account
                 </p>
               </div>
@@ -56,7 +56,7 @@ const Login = () => {
                 action="#"
               >
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-semibold text-gray-300">
                     Email or Username
                   </label>
                   <div className="relative">
@@ -65,7 +65,7 @@ const Login = () => {
                       {...register("username", {
                         required: "Username is required",
                       })}
-                      className="bg-gray-50/50 border-2 border-gray-200 text-gray-900 text-sm rounded-xl focus:border-blue-400 block w-full p-3.5 pr-12 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-400 transition-all duration-200 hover:border-gray-300 outline-none"
+                      className="bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 backdrop-blur-sm w-full"
                       placeholder="name@company.com or username"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -80,7 +80,7 @@ const Login = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-semibold text-gray-300">
                     Password
                   </label>
                   <div className="relative">
@@ -90,13 +90,13 @@ const Login = () => {
                         required: "Password is required",
                       })}
                       placeholder="••••••••"
-                      className="bg-gray-50/50 border-2 border-gray-200 text-gray-900 text-sm rounded-xl focus:border-blue-400 block w-full p-3.5 pr-20 dark:bg-gray-700/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-400 transition-all duration-200 hover:border-gray-300 outline-none"
+                      className="bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 rounded-lg px-4 py-3 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 backdrop-blur-sm w-full"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 mr-2"
+                        className="text-gray-400 hover:text-gray-300 transition-colors duration-200 mr-2"
                       >
                         {showPassword ? (
                           <MdVisibilityOff className="w-5 h-5" />
@@ -124,7 +124,7 @@ const Login = () => {
                         size="md"
                         className="text-blue-600"
                       />
-                      <span className="text-gray-600 dark:text-gray-400">
+                      <span className="text-gray-300">
                         Signing you in...
                       </span>
                     </div>
@@ -139,11 +139,11 @@ const Login = () => {
                 )}
 
                 <div className="text-center pt-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-300">
                     Don't have an account yet?{" "}
                     <a
                       href="/register"
-                      className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
+                      className="font-semibold text-blue-400 hover:text-cyan-400 transition-colors duration-200"
                     >
                       Sign up here
                     </a>
