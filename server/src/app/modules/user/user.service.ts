@@ -41,6 +41,9 @@ const registerUser = async (user: User) => {
 
 const allUsers = async () => {
   const result = await prisma.user.findMany({
+    where: {
+      isDeleted: false,
+    },
     orderBy: {
       activated: "desc",
     },
@@ -55,9 +58,8 @@ const blockUser = async (id: string) => {
     },
   });
 
-  // if true user found, then user is active. need to block
   if (users) {
-     await prisma.user.update({
+    await prisma.user.update({
       where: {
         id,
       },
@@ -66,9 +68,7 @@ const blockUser = async (id: string) => {
       },
     });
     return "block";
-  }
-  // user not found then user is blocked, need to active
-  else {
+  } else {
     await prisma.user.update({
       where: {
         id,
@@ -87,7 +87,7 @@ const changeUserRole = async (id: string, role: string) => {
       id,
     },
     data: {
-      role: role as any, // Since role is an enum in Prisma
+      role: role as any,
     },
   });
 
@@ -102,9 +102,41 @@ const changeUserRole = async (id: string, role: string) => {
   };
 };
 
+const softDeleteUser = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (user.isDeleted) {
+    throw new AppError(400, "User is already deleted");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+      activated: false,
+    },
+  });
+
+  return {
+    id: updatedUser.id,
+    username: user.username,
+    email: user.email,
+    deleted: true,
+    deletedAt: updatedUser.deletedAt,
+  };
+};
+
 export const userService = {
   registerUser,
   allUsers,
   blockUser,
   changeUserRole,
+  softDeleteUser,
 };

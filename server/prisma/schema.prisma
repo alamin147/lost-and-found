@@ -19,6 +19,8 @@ model User {
   foundItem FoundItem[]
   claim     Claim[]
   userImg   String      @default("")
+  isDeleted Boolean     @default(false)
+  deletedAt DateTime?
   // profile   UserProfile?
   LostItem  LostItem[]
 
