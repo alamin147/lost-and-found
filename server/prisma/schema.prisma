@@ -52,6 +52,8 @@ model FoundItem {
   claim         Claim[]
   claimProcess  String             @default("")
   isClaimed     Boolean            @default(false)
+  isDeleted     Boolean            @default(false)
+  deletedAt     DateTime?
 
   @@map("foundItems")
 }

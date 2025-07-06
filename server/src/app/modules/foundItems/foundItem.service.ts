@@ -39,7 +39,9 @@ const getFoundItem = async (data: TFilter) => {
     foundItemName,
   } = data;
 
-  const whereConditions: Prisma.FoundItemWhereInput = {};
+  const whereConditions: Prisma.FoundItemWhereInput = {
+    isDeleted: false,
+  };
 
   if (foundItemName) {
     whereConditions.foundItemName = {
@@ -102,6 +104,7 @@ const getMyFoundItem = async (user: JwtPayload) => {
   const result = await prisma.foundItem.findMany({
     where: {
       userId: user.id,
+      isDeleted: false,
     },
     include: {
       user: true,
@@ -134,12 +137,17 @@ const editMyFoundItem = async (data: any) => {
   return result;
 };
 const deleteMyFoundItem = async (id: string) => {
-  await prisma.foundItem.delete({
+  // Soft delete
+  const result = await prisma.foundItem.update({
     where: {
       id,
     },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+    },
   });
-  return null;
+  return result;
 };
 
 export const foundItemService = {
