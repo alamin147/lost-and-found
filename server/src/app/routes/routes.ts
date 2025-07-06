@@ -106,7 +106,7 @@ router.put(
 ///////////////////////////////////////////////////lost item//////////////////////////////////////////////
 
 // lost item mark as found
-router.put("/found-lost", auth(), lostItemController.markAsFound);
+router.put("/found-lost", auth(), lostItemController.toggleFoundStatus);
 // create lost item
 router.post("/lostItem", auth(), lostItemController.createLostItem);
 // get lost item

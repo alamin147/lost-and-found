@@ -3,15 +3,19 @@ import sendResponse from "../../global/response";
 import { StatusCodes } from "http-status-codes";
 import { lostTItemServices } from "./lostItem.service";
 
-const markAsFound = async (req: Request, res: Response) => {
-  const id: string = req.body;
-  const result = await lostTItemServices.markAsFound(id);
+const toggleFoundStatus = async (req: Request, res: Response) => {
   try {
+    const { id } = req.body;
+    const result = await lostTItemServices.toggleFoundStatus(id);
+    const message = result.isFound
+      ? "Item marked as found successfully"
+      : "Item marked as not found successfully";
+
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
-      message: "Found items retrieved successfully",
-      data: null,
+      message,
+      data: result,
     });
   } catch (error: any) {
     sendResponse(res, {
@@ -143,7 +147,7 @@ const deleteMyLostItem = async (req: Request, res: Response) => {
   }
 };
 export const lostItemController = {
-  markAsFound,
+  toggleFoundStatus,
   createLostItem,
   getLostItem,
   getSingleLostItem,

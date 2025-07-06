@@ -2,13 +2,35 @@ import { LostItem } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
 import prisma from "../../config/prisma";
 
-const markAsFound = async (id: string) => {
+const toggleFoundStatus = async (id: string) => {
+  // First get the current item to check its status
+  const currentItem = await prisma.lostItem.findUnique({
+    where: { id },
+    select: { isFound: true },
+  });
+
+  if (!currentItem) {
+    throw new Error("Item not found");
+  }
+
+  // Toggle the found status
   const result = await prisma.lostItem.update({
     where: {
       id,
     },
     data: {
-      isFound: true,
+      isFound: !currentItem.isFound,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      category: true,
     },
   });
   return result;
@@ -42,6 +64,9 @@ const createLostItem = async (userId: string, item: LostItem) => {
 
 const getLostItem = async () => {
   const result = await prisma.lostItem.findMany({
+    where: {
+      isDeleted: false, // Only get non-deleted items
+    },
     include: {
       user: true,
       category: true,
@@ -123,15 +148,30 @@ const editMyLostItem = async (data: any, user?: JwtPayload) => {
   return result;
 };
 const deleteMyLostItem = async (id: string) => {
-  await prisma.lostItem.delete({
+  const result = await prisma.lostItem.update({
     where: {
       id,
     },
+    data: {
+      isDeleted: true,
+      deletedAt: new Date(),
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      category: true,
+    },
   });
-  return null;
+  return result;
 };
 export const lostTItemServices = {
-  markAsFound,
+  toggleFoundStatus,
   createLostItem,
   getLostItem,
   getSingleLostItem,
