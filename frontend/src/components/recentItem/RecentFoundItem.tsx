@@ -1,6 +1,5 @@
 import { Spinner } from "flowbite-react";
 import { Link } from "react-router-dom";
-import type { lostItem } from "../../types/types";
 import { useGetFoundItemsQuery } from "../../redux/api/api";
 
 const RecentFoundItem = () => {
@@ -28,7 +27,7 @@ const RecentFoundItem = () => {
       {/* card items */}
       <div className="container mx-auto flex justify-center mb-10">
         <div className="grid gap-8 mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-4 ">
-          {foundItems?.data?.slice(0, 9).map((lostItem: lostItem) => {
+          {foundItems?.data?.slice(0, 9).map((lostItem: any) => {
             return (
               <div
                 key={`${lostItem?.id}127`}
@@ -52,14 +51,14 @@ const RecentFoundItem = () => {
                     </div>
                   ) : (
                     <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm border border-red-400/50">
-                      ⚠ Lost
+                      ⚠ Not Found
                     </div>
                   )}
                 </div>
 
                 <div className="p-5 text-white">
                   <h3 className="text-xl font-bold mb-3 text-white group-hover:text-cyan-400 transition-colors duration-300 line-clamp-1">
-                    {lostItem?.lostItemName}
+                    {lostItem?.foundItemName}
                   </h3>
 
                   <p className="text-gray-300 text-sm mb-4 line-clamp-2 leading-relaxed">
@@ -81,7 +80,7 @@ const RecentFoundItem = () => {
                     </div>
                   </div>
 
-                  <Link to={`/lostItems/${lostItem?.id}`} className="block">
+                  <Link to={`/foundItems/${lostItem?.id}`} className="block">
                     <button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg hover:shadow-xl">
                       View Details
                     </button>

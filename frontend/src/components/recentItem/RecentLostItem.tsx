@@ -6,10 +6,9 @@ import { useGetLostItemsQuery } from "../../redux/api/api";
 const RecentLostItem = () => {
   const { data: lostItems, isLoading } = useGetLostItemsQuery({});
   console.log("lost item", lostItems);
-
   if (isLoading) {
     return (
-      <div className="text-center bg-gray-900 pt-10">
+      <div className="min-h- text-center bg-gray-900 pt-10">
         <Spinner size="lg" />
       </div>
     );
@@ -29,7 +28,7 @@ const RecentLostItem = () => {
       {/* card items */}
       <div className="container mx-auto flex justify-center mb-10">
         <div className="grid gap-8 mx-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-4 ">
-          {lostItems?.data?.slice(0, 9).map((lostItem: lostItem) => {
+          {lostItems?.data?.map((lostItem: lostItem) => {
             return (
               <div
                 key={`${lostItem?.id}127`}
@@ -70,11 +69,15 @@ const RecentLostItem = () => {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm">
                       <span className="text-gray-400 mr-2">📅</span>
-                      <span className="text-gray-200">{lostItem?.date.split("T")[0]}</span>
+                      <span className="text-gray-200">
+                        {lostItem?.date.split("T")[0]}
+                      </span>
                     </div>
                     <div className="flex items-center text-sm">
                       <span className="text-gray-400 mr-2">📍</span>
-                      <span className="text-gray-200 line-clamp-1">{lostItem.location}</span>
+                      <span className="text-gray-200 line-clamp-1">
+                        {lostItem.location}
+                      </span>
                     </div>
                   </div>
 
