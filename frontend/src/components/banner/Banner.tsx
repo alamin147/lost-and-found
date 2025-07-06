@@ -3,9 +3,9 @@ import { useState } from "react";
 const Banner = () => {
   const [bgImg] = useState("/bgimg.png");
   return (
-    <section className="relative md:flex items-center md:min-h-[70vh] bg-white dark:bg-gray-900 py-10 md:py-0">
+    <section className="relative flex items-center min-h-[70vh] bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       <div
-        className="absolute inset-0 bg-black opacity-40"
+        className="absolute inset-0 bg-black/60"
         style={{
           backgroundImage: `url('${bgImg}')`,
           backgroundSize: "cover",
@@ -13,39 +13,51 @@ const Banner = () => {
           zIndex: 0,
         }}
       ></div>
-      <div className="relative z-10 py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
-        <a
-          className="inline-flex justify-between items-center py-1 px-1 pr-4 mb-7 text-sm text-gray-700 bg-gray-100 rounded-full dark:bg-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-          role="alert"
-        >
-          <span className="text-sm font-medium ps-4">
-            Lost something? Report here!!!
-          </span>
-        </a>
-        <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-          Welcome to Lost and Found Management
-        </h1>
-        <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
-          Lost and Found Management is your reliable partner in handling lost
-          items. Whether you’ve misplaced your belongings or found something
-          left behind, we’re here to assist.
-        </p>
-        <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <a
-            href="/reportlostItem"
-            className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-[#128eb0] dark:focus:ring-gray-800"
-          >
-            Report a Lost Item
-          </a>
-          <a
-            href="/reportFoundItem"
-            className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-[#128eb0] dark:focus:ring-gray-800"
-          >
-            Report a Found Item
-          </a>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 z-5"></div>
+
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 mx-auto max-w-7xl text-center">
+        <div className="animate-fade-in">
+          <div className="inline-flex justify-between items-center py-2 px-4 mb-8 text-sm bg-gradient-to-r from-blue-600/20 to-cyan-600/20 backdrop-blur-sm border border-blue-500/30 rounded-full text-white hover:from-blue-600/30 hover:to-cyan-600/30 transition-all duration-300 cursor-pointer group">
+            <span className="text-sm font-medium">
+              Lost something? Report here!
+              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200 inline-block">→</span>
+            </span>
+          </div>
+
+          <h1 className="mb-6 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none text-white">
+            Welcome to{" "}
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
+              Lost and Found
+            </span>{" "}
+            Management
+          </h1>
+
+          <p className="mb-10 text-lg lg:text-xl font-normal text-gray-300 max-w-4xl mx-auto">
+            Lost and Found Management is your reliable partner in handling lost
+            items. Whether you've misplaced your belongings or found something
+            left behind, we're here to assist with our modern, efficient system.
+          </p>
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center sm:gap-6">
+            <a
+              href="/reportlostItem"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 group"
+            >
+              <span>Report a Lost Item</span>
+              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">📋</span>
+            </a>
+            <a
+              href="/reportFoundItem"
+              className="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 group"
+            >
+              <span>Report a Found Item</span>
+              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">🔍</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
   );
 };
+
 export default Banner;
