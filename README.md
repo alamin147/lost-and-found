@@ -14,9 +14,9 @@ This project demonstrates a complete implementation of a community service platf
 
 ## 🌐 Live URL
 
-[Lost & Found Frontend](https://your-frontend-deployment-url.com)
+[Lost & Found Frontend](https://lost-and-found-rust.vercel.app)
 
-[Lost & Found Backend](https://your-backend-deployment-url.com)
+[Lost & Found Backend](https://lost-and-found-backend-lf.vercel.app)
 
 ---
 
@@ -88,19 +88,6 @@ This project demonstrates a complete implementation of a community service platf
 
 ---
 
-## 📷 Screenshots / Demo
-
-> The application includes:
-> - Homepage with featured items and statistics
-> - Lost and found item browsing with advanced search
-> - User dashboard for personal item management
-> - Admin dashboard with comprehensive management tools
-> - Claim request system with detailed forms
-> - User profile and settings management
-> - Category management system
-> - Real-time statistics and analytics
-
----
 
 ## 🛠️ Installation & Usage (Local)
 
@@ -333,5 +320,3 @@ The application can be deployed on various platforms:
 - **Frontend**: Vercel hosting service
 - **Backend**: Vercel hosting service
 - **Database**: PostgreSQL on Prisma Cloud
-
-
