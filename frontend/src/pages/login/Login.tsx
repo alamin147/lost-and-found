@@ -14,9 +14,22 @@ const Login = () => {
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const [login, { isLoading }] = useLoginMutation();
+
+  // Auto-fill functions
+  const fillAdminCredentials = () => {
+    setValue("username", "admin@gmail.com");
+    setValue("password", "123456");
+  };
+
+  const fillUserCredentials = () => {
+    setValue("username", "user@gmail.com");
+    setValue("password", "123456");
+  };
+
   const onSubmit = async (data: any) => {
     // console.log(data)
     try {
@@ -139,6 +152,33 @@ const Login = () => {
                     Sign In
                   </button>
                 )}
+
+                {/* Demo Login Buttons */}
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <div className="flex-grow border-t border-gray-600"></div>
+                    <span className="px-3 text-center text-sm text-gray-400 font-medium">
+                      Quick Demo Login
+                    </span>
+                    <div className="flex-grow border-t border-gray-600"></div>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={fillAdminCredentials}
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-md"
+                    >
+                      Login as Admin
+                    </button>
+                    <button
+                      type="button"
+                      onClick={fillUserCredentials}
+                      className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-md"
+                    >
+                      Login as User
+                    </button>
+                  </div>
+                </div>
 
                 <div className="text-center pt-4">
                   <p className="text-sm text-gray-300">
