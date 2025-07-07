@@ -47,8 +47,8 @@ const createLostItem = async (req: Request, res: Response) => {
 };
 
 const getLostItem = async (req: Request, res: Response) => {
-  const result = await lostTItemServices.getLostItem();
   try {
+    const result = await lostTItemServices.getLostItem();
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
@@ -66,10 +66,11 @@ const getLostItem = async (req: Request, res: Response) => {
 };
 
 const getSingleLostItem = async (req: Request, res: Response) => {
-  const id: any = req?.params.id;
-  // console.log(id)
-  const result = await lostTItemServices.getSingleLostItem(id);
   try {
+    const id: any = req?.params.id;
+    // console.log(id)
+    const result = await lostTItemServices.getSingleLostItem(id);
+
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
@@ -87,9 +88,8 @@ const getSingleLostItem = async (req: Request, res: Response) => {
 };
 
 const getMyLostItem = async (req: Request, res: Response) => {
-
-  const result = await lostTItemServices.getMyLostItem(req.user);
   try {
+    const result = await lostTItemServices.getMyLostItem(req.user);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
@@ -128,9 +128,9 @@ const editMyLostItem = async (req: Request, res: Response) => {
 };
 
 const deleteMyLostItem = async (req: Request, res: Response) => {
-  const id=req.params.id
-  await lostTItemServices.deleteMyLostItem(id);
   try {
+    const id = req.params.id;
+    await lostTItemServices.deleteMyLostItem(id);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
