@@ -1,11 +1,12 @@
 import app from "./app";
-import { Server } from "http";
+import dotenv from "dotenv";
 
-const port = 5000;
+dotenv.config();
 
+const PORT = process.env.PORT || 5000;
 async function main() {
-  const server: Server = app.listen(process.env.PORT, () => {
-    console.log("port", port);
+  app.listen(PORT, () => {
+    console.log("port", PORT);
   });
 }
 
