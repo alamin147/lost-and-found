@@ -258,7 +258,7 @@ const MyClaimReqPage = () => {
           </div>
         </div>
 
-        {/* Claims Grid */}
+        {/* Claims Table */}
         {filteredAndSortedClaims.length === 0 ? (
           <div className="text-center py-16">
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-12 shadow-xl border border-gray-700 max-w-md mx-auto">
@@ -291,120 +291,121 @@ const MyClaimReqPage = () => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredAndSortedClaims.map((claim: any) => {
-              const statusConfig = getStatusConfig(claim?.status);
+          /* Table View */
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-700">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-r from-gray-900 to-gray-800">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Item
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Status
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Location
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Found By
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Claim Date
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-700">
+                  {filteredAndSortedClaims.map((claim: any) => {
+                    const statusConfig = getStatusConfig(claim?.status);
 
-              return (
-                <div
-                  key={claim.id}
-                  className="group bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-xl border border-gray-700 hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                >
-                  {/* Image Section */}
-                  <div className="relative">
-                    <div className="aspect-square rounded-t-2xl overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800">
-                      <img
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        src={claim?.foundItem?.img}
-                        alt={claim?.foundItem?.foundItemName}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/bgimg.png";
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                      <div
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${statusConfig.color} text-white shadow-lg backdrop-blur-sm border border-white/20`}
+                    return (
+                      <tr
+                        key={claim.id}
+                        className="hover:bg-gray-700/50 transition-colors duration-200"
                       >
-                        {statusConfig.icon}
-                        <span className="ml-1">{statusConfig.label}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-white mb-2 line-clamp-1 group-hover:text-cyan-400 transition-colors duration-200">
-                      {claim?.foundItem?.foundItemName}
-                    </h3>
-
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-2">
-                      {claim?.foundItem?.description ||
-                        "No description provided."}
-                    </p>
-
-                    {/* Claim Details */}
-                    <div className="space-y-3 mb-4">
-                      {/* Status */}
-                      <div
-                        className={`p-3 rounded-lg border ${statusConfig.bgColor}`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-300">
-                            Status:
-                          </span>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 w-12 h-12 mr-4">
+                              <img
+                                className="w-12 h-12 rounded-lg object-cover"
+                                src={claim?.foundItem?.img}
+                                alt={claim?.foundItem?.foundItemName}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "/bgimg.png";
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <div className="font-medium text-white">
+                                {claim?.foundItem?.foundItemName}
+                              </div>
+                              <div className="text-sm text-gray-400 truncate max-w-xs">
+                                {claim?.foundItem?.description ||
+                                  "No description provided."}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
                           <div
-                            className={`flex items-center ${statusConfig.textColor}`}
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${statusConfig.color} text-white shadow-lg`}
                           >
                             {statusConfig.icon}
-                            <span className="ml-2 font-semibold">
-                              {statusConfig.label}
+                            <span className="ml-1">{statusConfig.label}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">
+                          <div className="flex items-center">
+                            <FaMapMarkerAlt className="mr-2 text-gray-400" />
+                            <span className="truncate max-w-xs">
+                              {claim?.foundItem?.location ||
+                                "Location not specified"}
                             </span>
                           </div>
-                        </div>
-                      </div>
-
-                      {/* Found by */}
-                      <div className="flex items-center text-gray-400 text-sm">
-                        <FaUser className="mr-2 flex-shrink-0" />
-                        <span>
-                          Found by:{" "}
-                          {claim?.foundItem?.user?.username || "Unknown"}
-                        </span>
-                      </div>
-
-                      {/* Location */}
-                      <div className="flex items-center text-gray-400 text-sm">
-                        <FaMapMarkerAlt className="mr-2 flex-shrink-0" />
-                        <span className="line-clamp-1">
-                          {claim?.foundItem?.location ||
-                            "Location not specified"}
-                        </span>
-                      </div>
-
-                      {/* Claim Date */}
-                      <div className="flex items-center text-gray-400 text-sm">
-                        <FaCalendarAlt className="mr-2 flex-shrink-0" />
-                        <span>
-                          Claimed:{" "}
-                          {claim?.createdAt
-                            ? new Date(claim.createdAt).toLocaleDateString(
-                                "en-US",
-                                {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                }
-                              )
-                            : "Date not available"}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <Link to={`/foundItems/${claim?.foundItem?.id}`}>
-                      <button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg hover:shadow-xl flex items-center justify-center">
-                        <FaEye className="mr-2" />
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">
+                          <div className="flex items-center">
+                            <FaUser className="mr-2 text-gray-400" />
+                            <span>
+                              {claim?.foundItem?.user?.username || "Unknown"}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">
+                          <div className="flex items-center">
+                            <FaCalendarAlt className="mr-2 text-gray-400" />
+                            <span>
+                              {claim?.createdAt
+                                ? new Date(claim.createdAt).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                    }
+                                  )
+                                : "Date not available"}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Link to={`/foundItems/${claim?.foundItem?.id}`}>
+                            <button className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg hover:shadow-xl">
+                              <FaEye className="mr-2" />
+                              View Details
+                            </button>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
