@@ -34,15 +34,39 @@ const MyLostItems = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem]: any = useState(null);
   const [currId, setCurrId]: any = useState();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete]: any = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDelete = async (id: string) => {
-    // console.log(id)
-    const res = await deleteMyLostItem(id);
-    if (res?.data?.statusCode == 200) {
-      Modals({ message: res?.data?.message, status: true });
-    } else {
+  const handleDeleteClick = (item: any) => {
+    setItemToDelete(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const res = await deleteMyLostItem(itemToDelete.id);
+      if (res?.data?.statusCode == 200) {
+        Modals({ message: res?.data?.message, status: true });
+      } else {
+        Modals({ message: "Failed to delete", status: false });
+      }
+    } catch (error) {
       Modals({ message: "Failed to delete", status: false });
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteModalOpen(false);
+      setItemToDelete(null);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+    setItemToDelete(null);
+    setIsDeleting(false);
   };
 
   const [editMyLostItem] = useEditMyLostItemMutation();
@@ -119,7 +143,7 @@ const MyLostItems = () => {
                   {myLostItems?.data?.length || 0}
                 </p>
               </div>
-              <div className="bg-blue-500 p-3 rounded-lg">
+              <div className="bg-gray-500 p-3 rounded-lg">
                 <FaSearch className="text-white" />
               </div>
             </div>
@@ -134,7 +158,7 @@ const MyLostItems = () => {
                     .length || 0}
                 </p>
               </div>
-              <div className="bg-red-500 p-3 rounded-lg">
+              <div className="bg-gray-500 p-3 rounded-lg">
                 <FaTimesCircle className="text-white" />
               </div>
             </div>
@@ -149,7 +173,7 @@ const MyLostItems = () => {
                     .length || 0}
                 </p>
               </div>
-              <div className="bg-green-500 p-3 rounded-lg">
+              <div className="bg-gray-500 p-3 rounded-lg">
                 <FaCheckCircle className="text-white" />
               </div>
             </div>
@@ -268,7 +292,7 @@ const MyLostItems = () => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => handleDelete(myLostItem.id)}
+                            onClick={() => handleDeleteClick(myLostItem)}
                             className="p-2 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors duration-200 transform hover:scale-110"
                             title="Delete item"
                           >
@@ -392,6 +416,91 @@ const MyLostItems = () => {
           </ModalBody>
         </div>
       </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        show={isDeleteModalOpen}
+        size="md"
+        popup={true}
+        onClose={handleDeleteCancel}
+      >
+        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700">
+          <ModalHeader className="border-b border-gray-700">
+            <h3 className="text-xl font-medium text-white">Delete Lost Item</h3>
+          </ModalHeader>
+          <ModalBody className="bg-gradient-to-br from-gray-800 to-gray-900">
+            <div className="space-y-6 p-6">
+              <div className="text-center">
+                <div className="mb-4">
+                  <div className="bg-red-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <FaTrash className="text-red-600 text-xl" />
+                  </div>
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    Are you sure you want to delete this item?
+                  </h3>
+                  <p className="text-gray-400 mb-4">
+                    This action cannot be undone. The lost item report will be
+                    permanently removed.
+                  </p>
+                </div>
+
+                {itemToDelete && (
+                  <div className="bg-gray-700 rounded-lg p-4 mb-6 text-left">
+                    <div className="flex items-center">
+                      <img
+                        className="w-12 h-12 rounded-lg object-cover mr-4"
+                        src={itemToDelete?.img || img}
+                        alt={itemToDelete?.lostItemName}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = img;
+                        }}
+                      />
+                      <div>
+                        <h4 className="font-medium text-white mb-1">
+                          {itemToDelete?.lostItemName}
+                        </h4>
+                        <p className="text-sm text-gray-400 mb-1">
+                          {itemToDelete?.description}
+                        </p>
+                        <div className="flex justify-between text-sm text-gray-500">
+                          <span>Location: {itemToDelete?.location}</span>
+                          <span>Date: {itemToDelete?.date?.split("T")[0]}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-center space-x-3">
+                  <Button
+                    color="gray"
+                    onClick={handleDeleteCancel}
+                    disabled={isDeleting}
+                    className="bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-200"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleDeleteConfirm}
+                    disabled={isDeleting}
+                    className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold rounded-lg transition-all duration-200"
+                  >
+                    {isDeleting ? (
+                      <>
+                        <Spinner size="sm" className="mr-2" />
+                        Deleting...
+                      </>
+                    ) : (
+                      "Delete Item"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </ModalBody>
+        </div>
+      </Modal>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
