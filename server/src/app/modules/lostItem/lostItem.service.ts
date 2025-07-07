@@ -65,7 +65,7 @@ const createLostItem = async (userId: string, item: LostItem) => {
 const getLostItem = async () => {
   const result = await prisma.lostItem.findMany({
     where: {
-      isDeleted: false, // Only get non-deleted items
+      isDeleted: false, 
     },
     include: {
       user: true,
@@ -80,6 +80,7 @@ const getSingleLostItem = async (singleId: string) => {
   const result = await prisma.lostItem.findFirst({
     where: {
       id: singleId,
+      isDeleted: false, // Only get non-deleted items
     },
     include: {
       user: true,
@@ -93,6 +94,7 @@ const getMyLostItem = async (user: JwtPayload) => {
   const result = await prisma.lostItem.findMany({
     where: {
       userId: user.id,
+      isDeleted: false,
     },
     include: {
       user: true,

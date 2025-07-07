@@ -83,6 +83,7 @@ const getSingleFoundItem = async (id: string) => {
   const result = await prisma.foundItem.findFirst({
     where: {
       id,
+      isDeleted: false, // Only get non-deleted items
     },
     include: {
       user: {

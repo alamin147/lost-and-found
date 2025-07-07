@@ -84,6 +84,8 @@ model Claim {
   id                     String    @id @default(uuid())
   userId                 String
   foundItemId            String
+  isDeleted    Boolean            @default(false)
+  deletedAt    DateTime?
   status                 status    @default(PENDING)
   distinguishingFeatures String?
   lostDate               DateTime
