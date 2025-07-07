@@ -13,7 +13,15 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Modals from "../modal/Modal";
 import { ToastContainer } from "react-toastify";
-import { FaSearch, FaUser, FaCog, FaSignOutAlt, FaList, FaHome, FaTachometerAlt } from "react-icons/fa";
+import {
+  FaSearch,
+  FaUser,
+  FaCog,
+  FaSignOutAlt,
+  FaList,
+  FaHome,
+  FaTachometerAlt,
+} from "react-icons/fa";
 
 export function Navbars() {
   const navigate = useNavigate();
@@ -90,14 +98,19 @@ export function Navbars() {
                       <span className="block text-white font-medium text-sm">
                         {users?.email ? users?.email : "User"}
                       </span>
-                      <span className="block text-gray-400 text-xs">{users?.role}</span>
+                      <span className="block text-gray-400 text-xs">
+                        {users?.role}
+                      </span>
                     </div>
                   </div>
                 </DropdownHeader>
 
                 {users?.role === "ADMIN" && (
                   <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
-                    <Link to="/dashboard" className="flex items-center space-x-2 w-full">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center space-x-2 w-full"
+                    >
                       <FaTachometerAlt className="text-cyan-400" />
                       <span>Dashboard</span>
                     </Link>
@@ -105,28 +118,40 @@ export function Navbars() {
                 )}
 
                 <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
-                  <Link to="/dashboard/settings" className="flex items-center space-x-2 w-full">
+                  <Link
+                    to="/dashboard/settings"
+                    className="flex items-center space-x-2 w-full"
+                  >
                     <FaCog className="text-blue-400" />
                     <span>Settings</span>
                   </Link>
                 </DropdownItem>
 
                 <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
-                  <Link to="/dashboard/myLostItems" className="flex items-center space-x-2 w-full">
+                  <Link
+                    to="/dashboard/myLostItems"
+                    className="flex items-center space-x-2 w-full"
+                  >
                     <FaList className="text-yellow-400" />
                     <span>My lost items</span>
                   </Link>
                 </DropdownItem>
 
                 <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
-                  <Link to="/dashboard/myFoundItems" className="flex items-center space-x-2 w-full">
+                  <Link
+                    to="/dashboard/myFoundItems"
+                    className="flex items-center space-x-2 w-full"
+                  >
                     <FaSearch className="text-green-400" />
                     <span>My found items</span>
                   </Link>
                 </DropdownItem>
 
                 <DropdownItem className="hover:bg-gray-700 text-gray-300 hover:text-white">
-                  <Link to="/dashboard/myClaimRequest" className="flex items-center space-x-2 w-full">
+                  <Link
+                    to="/dashboard/myClaimRequest"
+                    className="flex items-center space-x-2 w-full"
+                  >
                     <FaUser className="text-purple-400" />
                     <span>My claims</span>
                   </Link>
@@ -166,14 +191,19 @@ export function Navbars() {
             href="/"
             className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium flex items-center space-x-2"
           >
-            <FaHome className="text-sm" />
             <span>Home</span>
           </NavbarLink>
           <NavbarLink
-            href="#aboutUs"
+            href="/reportlostItem"
             className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
           >
-            About us
+            Report Lost Item
+          </NavbarLink>
+          <NavbarLink
+            href="/reportFoundItem"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
+          >
+            Report Found Item
           </NavbarLink>
           <NavbarLink
             href="/lostItems"
@@ -186,6 +216,12 @@ export function Navbars() {
             className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
           >
             Found items
+          </NavbarLink>
+          <NavbarLink
+            href="#aboutUs"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 px-4 py-3 rounded-lg transition-all duration-200 font-medium"
+          >
+            About us
           </NavbarLink>
         </NavbarCollapse>
       </Navbar>
