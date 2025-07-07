@@ -26,6 +26,8 @@ const Login = () => {
         Modals({ message: "User logged in successfully", status: true });
         setUserLocalStorage(res?.data?.data?.token);
         navigate("/");
+        // Reload the page to update user state
+        window.location.reload();
       } else {
         Modals({ message: res?.error?.data?.message, status: false });
       }

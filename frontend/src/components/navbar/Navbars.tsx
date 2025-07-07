@@ -29,6 +29,7 @@ export function Navbars() {
   const handleSignOut = () => {
     signOut(navigate);
     Modals({ message: "Log out successfully", status: true });
+    window.location.reload();
   };
 
   return (
