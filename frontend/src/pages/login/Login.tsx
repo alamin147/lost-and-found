@@ -26,7 +26,7 @@ const Login = () => {
   };
 
   const fillUserCredentials = () => {
-    setValue("username", "user@gmail.com");
+    setValue("username", "user1@gmail.com");
     setValue("password", "123456");
   };
 

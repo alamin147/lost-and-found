@@ -14,7 +14,7 @@ name   String @default("")
   email     String      @unique
   activated Boolean     @default(true)
   password  String
-  role      userRole    @default(ADMIN)
+  role      userRole    @default(USER)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   foundItem FoundItem[]
