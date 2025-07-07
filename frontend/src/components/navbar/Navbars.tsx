@@ -31,7 +31,6 @@ export function Navbars() {
     Modals({ message: "Log out successfully", status: true });
     window.location.reload();
   };
-
   return (
     <>
       <Navbar
@@ -57,7 +56,7 @@ export function Navbars() {
               {/* User info - hidden on mobile */}
               <div className="hidden lg:block text-right">
                 <p className="text-white text-sm font-medium">
-                  {users?.email?.split("@")[0] || "User"}
+                  {users?.name || "User"}
                 </p>
                 <p className="text-gray-400 text-xs">{users?.role || "USER"}</p>
               </div>
@@ -89,11 +88,22 @@ export function Navbars() {
               >
                 <DropdownHeader className="bg-gray-700/50">
                   <div className="flex items-center space-x-3 py-2">
-                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold text-xs">
-                        {users?.email?.charAt(0)?.toUpperCase() || "U"}
-                      </span>
-                    </div>
+                    {users?.userImg ? (
+                      <img
+                        src={users?.userImg}
+                        alt="User"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-semibold text-xs">
+                          {users?.name?.charAt(0)?.toUpperCase() ||
+                            users?.username?.charAt(0)?.toUpperCase() ||
+                            users?.email?.charAt(0)?.toUpperCase() ||
+                            "U"}
+                        </span>
+                      </div>
+                    )}
                     <div>
                       <span className="block text-white font-medium text-sm">
                         {users?.email ? users?.email : "User"}

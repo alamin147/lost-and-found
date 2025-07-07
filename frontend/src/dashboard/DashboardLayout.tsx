@@ -311,7 +311,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="flex items-center space-x-3">
               <div className="hidden sm:block text-right">
                 <p className="text-white text-sm font-medium">
-                  {user?.email?.split("@")[0] || "User"}
+                  {user?.name || "User"}
                 </p>
                 <p className="text-gray-400 text-xs">{user?.role || "USER"}</p>
               </div>
@@ -321,11 +321,22 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 inline
                 label={
                   <div className="relative group cursor-pointer">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center border-2 border-gray-600 group-hover:border-cyan-400 transition-all duration-200 shadow-lg">
-                      <span className="text-white font-semibold text-sm">
-                        {user?.email?.charAt(0)?.toUpperCase() || "U"}
-                      </span>
-                    </div>
+                    {user?.userImg ? (
+                      <img
+                        src={user?.userImg}
+                        alt="User"
+                        className="w-10 h-10 rounded-full border-2 border-gray-600 group-hover:border-cyan-400 transition-all duration-200 shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center border-2 border-gray-600 group-hover:border-cyan-400 transition-all duration-200 shadow-lg">
+                        <span className="text-white font-semibold text-sm">
+                          {user?.name?.charAt(0)?.toUpperCase() ||
+                            user?.username?.charAt(0)?.toUpperCase() ||
+                            user?.email?.charAt(0)?.toUpperCase() ||
+                            "U"}
+                        </span>
+                      </div>
+                    )}
                     <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-gray-800 rounded-full"></div>
                   </div>
                 }
@@ -333,11 +344,22 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               >
                 <DropdownHeader className="bg-gray-700/50">
                   <div className="flex items-center space-x-3 py-2">
-                    <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-semibold text-xs">
-                        {user?.email?.charAt(0)?.toUpperCase() || "U"}
-                      </span>
-                    </div>
+                    {user?.userImg ? (
+                      <img
+                        src={user?.userImg}
+                        alt="User"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-semibold text-xs">
+                          {user?.name?.charAt(0)?.toUpperCase() ||
+                            user?.username?.charAt(0)?.toUpperCase() ||
+                            user?.email?.charAt(0)?.toUpperCase() ||
+                            "U"}
+                        </span>
+                      </div>
+                    )}
                     <div>
                       <span className="block text-white font-medium text-sm">
                         {user?.email ? user?.email : "User"}

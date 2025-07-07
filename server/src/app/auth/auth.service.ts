@@ -27,11 +27,12 @@ const loginUser = async (data: any) => {
     throw new AppError(StatusCodes.FORBIDDEN, "Password is incorrect");
   }
 
-  const { id, email, role, userImg, username } = user;
-  const accessToken = utils.createToken({ id, email, username, role, userImg });
+  const { id, name, email, role, userImg, username } = user;
+  const accessToken = utils.createToken({ id, name, email, username, role, userImg });
 
   return {
     id: user.id,
+    name: name || "User",
     username: user.username,
     email: user.email,
     role,
