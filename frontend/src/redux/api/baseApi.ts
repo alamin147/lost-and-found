@@ -1,13 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getUserLocalStorage } from "../../auth/auth";
 
+const isProduction = import.meta.env.VITE_PRODUCTION == "true";
+const serverUrl = `${import.meta.env.VITE_SERVER_URL}/api`||"http://localhost:5000/api";
+
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      import.meta.env.VITE_PRODUCTION == true
-        ? `${import.meta.env.VITE_SERVER_URL}/api`
-        : "http://localhost:5000/api",
+        isProduction
+            ? serverUrl
+            : "http://localhost:5000/api",
     credentials: "include",
     prepareHeaders: (headers, {}) => {
       const token = getUserLocalStorage();
