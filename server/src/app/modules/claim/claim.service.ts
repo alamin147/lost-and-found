@@ -15,11 +15,14 @@ const createClaim = async (item: Claim, user: JwtPayload) => {
 };
 const getClaim = async () => {
   const result = await prisma.claim.findMany({
+    where: {
+      isDeleted: false,
+      foundItem: {
+        isDeleted: false,
+      },
+    },
     include: {
       foundItem: {
-        where: {
-          isDeleted: false, // Only include non-deleted found items
-        },
         include: {
           category: true,
           user: {
