@@ -36,32 +36,37 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
-  const user = useUserVerification() as any; // Type assertion for user object
+  const user = useUserVerification() as any;
 
+  // console.log({user})
   const menuItems = [
     {
       title: "Dashboard",
       icon: <FaTachometerAlt />,
       path: "/dashboard",
       badge: null,
+      adminOnly: true,
     },
     {
       title: "Found Items",
       icon: <FaSearch />,
       path: "/dashboard/found-items",
+      adminOnly: true,
       badge: null,
     },
     {
       title: "Lost Items",
       icon: <FaExclamationTriangle />,
       path: "/dashboard/lost-items",
+      adminOnly: true,
       badge: null,
     },
     {
       title: "Claims",
       icon: <FaClipboardList />,
       path: "/dashboard/claims",
-      badge: "3",
+      adminOnly: true,
+      badge: null,
     },
     {
       title: "Users",
@@ -78,6 +83,27 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       adminOnly: true,
     },
     {
+      title: "My Lost Items",
+      icon: <FaSearch />,
+      path: "/dashboard/myLostItems",
+      badge: null,
+      adminOnly: false,
+    },
+    {
+      title: "My Found Items",
+      icon: <FaBoxOpen />,
+      path: "/dashboard/myFoundItems",
+      badge: null,
+      adminOnly: false,
+    },
+    {
+      title: "My Claims",
+      icon: <FaBoxOpen />,
+      path: "/dashboard/myClaimRequest",
+      badge: null,
+      adminOnly: false,
+    },
+    {
       title: "Settings",
       icon: <FaCog />,
       path: "/dashboard/settings",
@@ -86,7 +112,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   ];
 
   const filteredMenuItems = menuItems.filter(
-    (item) => !item.adminOnly || user?.role === "ADMIN"
+    (item) => !item.adminOnly || user?.role == "ADMIN"
   );
 
   const isActive = (path: string) => {
