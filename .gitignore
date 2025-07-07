@@ -34,3 +34,4 @@ frontend/.flowbite-react
 frontend/.vscode
 frontend/dist
 frontend/.env
+frontend/.vercel

@@ -4,11 +4,12 @@ import { getUserLocalStorage } from "../../auth/auth";
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
-    // baseUrl: `${import.meta.env.VITE_SERVER_URL}/api`,
-
+    baseUrl:
+      import.meta.env.VITE_PRODUCTION == true
+        ? `${import.meta.env.VITE_SERVER_URL}/api`
+        : "http://localhost:5000/api",
     credentials: "include",
-    prepareHeaders: (headers, {  }) => {
+    prepareHeaders: (headers, {}) => {
       const token = getUserLocalStorage();
 
       if (token) {
@@ -17,7 +18,19 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["mylostItems", "myFoundItems", "users", "adminData", "testimonials", "services", "faqs", "recentActivity","foundItems","claims","categories"],
+  tagTypes: [
+    "mylostItems",
+    "myFoundItems",
+    "users",
+    "adminData",
+    "testimonials",
+    "services",
+    "faqs",
+    "recentActivity",
+    "foundItems",
+    "claims",
+    "categories",
+  ],
 
   endpoints: () => ({}),
 });
