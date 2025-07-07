@@ -19,7 +19,6 @@ import {
   FaCog,
   FaSignOutAlt,
   FaList,
-  FaHome,
   FaTachometerAlt,
 } from "react-icons/fa";
 

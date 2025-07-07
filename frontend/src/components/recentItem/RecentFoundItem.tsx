@@ -47,7 +47,7 @@ const RecentFoundItem = () => {
 
                   {lostItem?.isFound ? (
                     <div className="absolute top-3 right-3 bg-gradient-to-r from-green-500 to-green-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm border border-green-400/50">
-                      ✓ Found
+                      ✓ Claimed
                     </div>
                   ) : (
                     <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm border border-red-400/50">
